@@ -24,7 +24,7 @@ Aplikacja dla mieszkańców Wrocławia: robisz zdjęcie szczura, model AI potwie
 | Backend | Supabase: Postgres + PostGIS, Auth, Storage, Edge Functions (TS/Deno), `pg_cron` |
 | Rozpoznawanie szczurów | Start: multimodalny model AI przez API (VLM) za interfejsem `RatVerifier`. Później: hybryda z własnym, douczonym detektorem |
 | Ochrona przed oszustwami | Poziom „rozsądny”: zdjęcie tylko z aparatu na żywo, weryfikacja na serwerze, granice Wrocławia, limit dzienny, wykrywanie duplikatów, cooldown miejsca, zgłaszanie nadużyć |
-| Logowanie | Google + link logujący e-mailem (bez haseł); publicznie widać tylko pseudonim |
+| Logowanie | Google + jednorazowy 6-cyfrowy kod wysyłany e-mailem (bez haseł). Kod zamiast linku, bo na iOS link z maila otwiera Safari, a nie zainstalowaną PWA (osobna sesja). Publicznie widać tylko pseudonim |
 | Mapa | Dokładna lokalizacja + pseudonim autora (z możliwością ukrycia); dokładność konfigurowalna, by w razie problemów przejść na rozmytą |
 | Punktacja | Liczy się każdy szczur na zdjęciu (max 5), z cooldownem miejsca i limitem dziennym |
 | Nagrody | Start: treści cyfrowe (karty wiedzy, quizy, kosmetyka). Później: kody od partnerów |
@@ -36,7 +36,7 @@ Aplikacja dla mieszkańców Wrocławia: robisz zdjęcie szczura, model AI potwie
 ```
 ┌─────────────────────────┐        ┌──────────────────────────────────────┐
 │  PWA (React + TS + Vite)│        │              Supabase                │
-│  Cloudflare Pages       │  HTTPS │  Auth ── Google + link e-mail        │
+│  Cloudflare Pages       │  HTTPS │  Auth ── Google + kod e-mail         │
 │  • aparat (live)        │ ─────► │  Postgres + PostGIS ── dane, ranking │
 │  • GPS                  │        │  Storage ── zdjęcia                  │
 │  • mapa MapLibre        │        │  Edge Function `submit-sighting`     │
@@ -263,7 +263,7 @@ Zakładki Miesięczny i Ogólny; wartość = suma `rats_awarded`. Pokazujemy top
 
 **Etap 1 — MVP (pierwszy plan implementacji)**
 - Szkielet PWA (instalowalność, ikona, paleta, i18n, onboarding z instrukcją dla iOS).
-- Logowanie Google + link e-mail, pseudonim, zgody.
+- Logowanie Google + kod z e-maila, pseudonim, zgody.
 - Zgłoszenie szczura z pełną ochroną z sekcji 4 i `VlmVerifier`.
 - Licznik, żetony, rangi, profil.
 - Mapa z zanikaniem, znacznikami i panelem szczegółów; zgłaszanie nadużyć.
