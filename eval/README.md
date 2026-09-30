@@ -7,6 +7,6 @@
    - `toy` — 1, jeśli to zabawka, rysunek, figurka,
    - `selfie` — 1, jeśli widać twarz fotografującego.
 3. Wpisz klucz Gemini do `supabase/functions/.env` (`GEMINI_API_KEY=…`).
-4. Uruchom: `node --env-file=supabase/functions/.env scripts/eval-verifier.ts eval`
+4. Uruchom: `npm run eval`
 
 Dobry zbiór startowy: 20–30 zdjęć, w tym „pułapki” (myszy, wiewiórki, chomiki, pluszaki, zdjęcia ekranu). Cel: precyzja „to jest szczur” ≥ 95%.

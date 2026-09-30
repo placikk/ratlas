@@ -17,7 +17,8 @@
     "test:db": "supabase test db",
     "deploy": "npm run build && wrangler deploy",
     "functions:serve": "supabase functions serve --env-file supabase/functions/.env",
-    "smoke": "node scripts/smoke-sighting.mjs"
+    "smoke": "node scripts/smoke-sighting.mjs",
+    "eval": "tsx --env-file=supabase/functions/.env scripts/eval-verifier.ts eval"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.3.0",
@@ -40,6 +41,7 @@
     "jsdom": "^30.1.1",
     "oxlint": "^1.81.0",
     "supabase": "^2.118.0",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vite-plugin-pwa": "^1.3.0",

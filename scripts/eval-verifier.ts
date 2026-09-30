@@ -1,5 +1,5 @@
 // Ocena Gemini na własnych zdjęciach. Uruchom:
-//   node --env-file=supabase/functions/.env scripts/eval-verifier.ts eval
+//   npm run eval
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { createGeminiVerifier, DEFAULT_GEMINI_MODEL } from '../supabase/functions/_shared/geminiVerifier.ts'
