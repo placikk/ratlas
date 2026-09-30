@@ -50,7 +50,7 @@ Możesz użyć innego darmowego dostawcy SMTP w ten sam sposób.
 3. Wdróż:
    ```bash
    npx wrangler login
-   npx wrangler pages project create ratlas --production-branch main
+   npx wrangler pages project create ratlas --production-branch master
    npm run deploy
    ```
 4. Adres aplikacji: `https://ratlas.pages.dev` (jeśli nazwa jest zajęta, Cloudflare poda inny — użyj go poniżej).
