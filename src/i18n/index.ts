@@ -7,7 +7,7 @@ void i18n.use(initReactI18next).init({
   fallbackLng: 'pl',
   resources: { pl: { translation: pl } },
   interpolation: { escapeValue: false },
-  initImmediate: false,
+  initAsync: false,
 })
 
 export default i18n
