@@ -3,21 +3,28 @@ import { expect, test } from 'vitest'
 import { parseLabels, summarize, type EvalCase } from './summary.ts'
 
 test('czyta etykiety z CSV', () => {
-  const csv = 'file,rats,screen,toy,selfie\nszczur.jpg,2,0,0,0\nekran.jpg,1,1,0,0\n\n'
+  const csv = 'file,rats,screen,toy,selfie,faces\nszczur.jpg,2,0,0,0,1\nekran.jpg,1,1,0,0,0\n\n'
   expect(parseLabels(csv)).toEqual([
-    { file: 'szczur.jpg', rats: 2, screen: false, toy: false, selfie: false },
-    { file: 'ekran.jpg', rats: 1, screen: true, toy: false, selfie: false },
+    { file: 'szczur.jpg', rats: 2, screen: false, toy: false, selfie: false, faces: true },
+    { file: 'ekran.jpg', rats: 1, screen: true, toy: false, selfie: false, faces: false },
   ])
 })
 
-const rat: EvalCase = { file: 'a.jpg', rats: 1, screen: false, toy: false, selfie: false }
-const mouse: EvalCase = { file: 'mysz.jpg', rats: 0, screen: false, toy: false, selfie: false }
-const screenShot: EvalCase = { file: 'ekran.jpg', rats: 1, screen: true, toy: false, selfie: false }
-const ok = (ratCount: number, flags: Partial<{ isScreenOrPrint: boolean; isToyOrDrawing: boolean; isSelfie: boolean }> = {}) => ({
+test('brak kolumny faces oznacza false', () => {
+  expect(parseLabels('file,rats,screen,toy,selfie\na.jpg,1,0,0,1\n')).toEqual([
+    { file: 'a.jpg', rats: 1, screen: false, toy: false, selfie: true, faces: false },
+  ])
+})
+
+const rat: EvalCase = { file: 'a.jpg', rats: 1, screen: false, toy: false, selfie: false, faces: false }
+const mouse: EvalCase = { file: 'mysz.jpg', rats: 0, screen: false, toy: false, selfie: false, faces: false }
+const screenShot: EvalCase = { file: 'ekran.jpg', rats: 1, screen: true, toy: false, selfie: false, faces: false }
+const ok = (ratCount: number, flags: Partial<{ isScreenOrPrint: boolean; isToyOrDrawing: boolean; isSelfie: boolean; hasThirdPartyFaces: boolean }> = {}) => ({
   ratCount,
   isScreenOrPrint: false,
   isToyOrDrawing: false,
   isSelfie: false,
+  hasThirdPartyFaces: false,
   ...flags,
 })
 
@@ -47,5 +54,23 @@ test('liczy precyzję i czułość rozpoznania „prawdziwy szczur”', () => {
     'mysz.jpg: model uznał za szczura',
     'c.jpg: model nie uznał za szczura',
     'd.jpg: brak odpowiedzi modelu',
+  ])
+})
+
+test('liczy trafność flag selfie i twarzy oraz wypisuje przeoczenia', () => {
+  const summary = summarize([
+    { evalCase: { ...rat, file: 's1.jpg', selfie: true }, predicted: ok(1, { isSelfie: true }) },
+    { evalCase: { ...rat, file: 's2.jpg', selfie: true }, predicted: ok(1) },
+    { evalCase: { ...rat, file: 's3.jpg' }, predicted: ok(1, { isSelfie: true }) },
+    { evalCase: { ...rat, file: 'f1.jpg', faces: true }, predicted: ok(1) },
+    { evalCase: { ...rat, file: 'f2.jpg', faces: true }, predicted: ok(1, { hasThirdPartyFaces: true }) },
+    { evalCase: { ...rat, file: 'x.jpg', faces: true }, predicted: null },
+  ])
+
+  expect(summary.selfie).toEqual({ correct: 3, total: 5 })
+  expect(summary.faces).toEqual({ correct: 4, total: 5 })
+  expect(summary.privacyMisses).toEqual([
+    's2.jpg: model przeoczył selfie',
+    'f1.jpg: model przeoczył twarz osoby trzeciej',
   ])
 })

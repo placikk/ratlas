@@ -4,6 +4,7 @@ export interface EvalCase {
   screen: boolean
   toy: boolean
   selfie: boolean
+  faces: boolean
 }
 
 export interface Predicted {
@@ -11,11 +12,17 @@ export interface Predicted {
   isScreenOrPrint: boolean
   isToyOrDrawing: boolean
   isSelfie: boolean
+  hasThirdPartyFaces: boolean
 }
 
 export interface EvalOutcome {
   evalCase: EvalCase
   predicted: Predicted | null
+}
+
+export interface FlagAccuracy {
+  correct: number
+  total: number
 }
 
 export interface EvalSummary {
@@ -28,6 +35,10 @@ export interface EvalSummary {
   precision: number
   recall: number
   exactCount: number
+  selfie: FlagAccuracy
+  faces: FlagAccuracy
+  // Przeoczone selfie lub twarz osoby trzeciej = zdjęcie, które trafiłoby na mapę z czyjąś twarzą.
+  privacyMisses: string[]
   mistakes: string[]
 }
 
@@ -37,8 +48,8 @@ export function parseLabels(csv: string): EvalCase[] {
     .slice(1)
     .filter((line) => line.trim() !== '')
     .map((line) => {
-      const [file, rats, screen, toy, selfie] = line.split(',').map((cell) => cell.trim())
-      return { file, rats: Number(rats), screen: screen === '1', toy: toy === '1', selfie: selfie === '1' }
+      const [file, rats, screen, toy, selfie, faces] = line.split(',').map((cell) => cell.trim())
+      return { file, rats: Number(rats), screen: screen === '1', toy: toy === '1', selfie: selfie === '1', faces: faces === '1' }
     })
 }
 
@@ -62,6 +73,9 @@ export function summarize(outcomes: EvalOutcome[]): EvalSummary {
     precision: 0,
     recall: 0,
     exactCount: 0,
+    selfie: { correct: 0, total: 0 },
+    faces: { correct: 0, total: 0 },
+    privacyMisses: [],
     mistakes: [],
   }
 
@@ -71,6 +85,13 @@ export function summarize(outcomes: EvalOutcome[]): EvalSummary {
       summary.mistakes.push(`${evalCase.file}: brak odpowiedzi modelu`)
       continue
     }
+    summary.selfie.total += 1
+    if (predicted.isSelfie === evalCase.selfie) summary.selfie.correct += 1
+    else if (evalCase.selfie) summary.privacyMisses.push(`${evalCase.file}: model przeoczył selfie`)
+    summary.faces.total += 1
+    if (predicted.hasThirdPartyFaces === evalCase.faces) summary.faces.correct += 1
+    else if (evalCase.faces) summary.privacyMisses.push(`${evalCase.file}: model przeoczył twarz osoby trzeciej`)
+
     const expected = expectedRealRat(evalCase)
     const actual = predictedRealRat(predicted)
     if (expected && actual) {
