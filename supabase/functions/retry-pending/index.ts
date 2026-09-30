@@ -25,39 +25,51 @@ export default {
     let resolved = 0
 
     for (const sighting of pending) {
-      const download = await admin.storage.from(sighting.photo_bucket).download(sighting.photo_path)
-      if (download.error) throw download.error
-      const photo = new Uint8Array(await download.data.arrayBuffer())
-
-      let verification
       try {
-        verification = await verifier.verify(photo)
-      } catch (verifyError) {
-        if (!(verifyError instanceof VerifierUnavailableError)) throw verifyError
-        const { error: failError } = await admin.rpc('fail_verification', { p_id: sighting.id })
-        if (failError) throw failError
-        continue
-      }
+        const download = await admin.storage.from(sighting.photo_bucket).download(sighting.photo_path)
+        if (download.error) throw download.error
+        const photo = new Uint8Array(await download.data.arrayBuffer())
 
-      let place = { bucket: sighting.photo_bucket, path: sighting.photo_path }
-      if (isPublicCandidate(verification)) {
-        const target = photoPlacement(userId, sighting.id, verification)
-        const move = await admin.storage
-          .from(sighting.photo_bucket)
-          .move(sighting.photo_path, target.path, { destinationBucket: target.bucket })
-        if (move.error) throw move.error
-        place = target
-      }
+        let verification
+        try {
+          verification = await verifier.verify(photo)
+        } catch (verifyError) {
+          if (!(verifyError instanceof VerifierUnavailableError)) throw verifyError
+          const { error: failError } = await admin.rpc('fail_verification', { p_id: sighting.id })
+          if (failError) throw failError
+          continue
+        }
 
-      const { error: resolveError } = await admin.rpc('resolve_pending', {
-        p_id: sighting.id,
-        p_photo_bucket: place.bucket,
-        p_photo_path: place.path,
-        p_verifier: verifier.name,
-        p_verification: verification,
-      })
-      if (resolveError) throw resolveError
-      resolved += 1
+        // Publiczne zdjęcie najpierw kopiujemy (idempotentnie), źródło usuwamy dopiero po zapisie w bazie.
+        let place = { bucket: sighting.photo_bucket, path: sighting.photo_path }
+        let moved = false
+        if (isPublicCandidate(verification)) {
+          const target = photoPlacement(userId, sighting.id, verification)
+          const upload = await admin.storage
+            .from(target.bucket)
+            .upload(target.path, photo, { contentType: 'image/jpeg', upsert: true })
+          if (upload.error) throw upload.error
+          moved = target.bucket !== sighting.photo_bucket || target.path !== sighting.photo_path
+          place = target
+        }
+
+        const { error: resolveError } = await admin.rpc('resolve_pending', {
+          p_id: sighting.id,
+          p_photo_bucket: place.bucket,
+          p_photo_path: place.path,
+          p_verifier: verifier.name,
+          p_verification: verification,
+        })
+        if (resolveError) throw resolveError
+        resolved += 1
+
+        if (moved) {
+          const removal = await admin.storage.from(sighting.photo_bucket).remove([sighting.photo_path])
+          if (removal.error) console.error(`retry-pending: cleanup failed for ${sighting.id}`, removal.error)
+        }
+      } catch (sightingError) {
+        console.error(`retry-pending: sighting ${sighting.id} failed`, sightingError)
+      }
     }
 
     return Response.json({ resolved })
