@@ -35,31 +35,33 @@ Możesz użyć innego darmowego dostawcy SMTP w ten sam sposób.
 1. https://console.cloud.google.com → nowy projekt `ratlas`.
 2. APIs & Services → OAuth consent screen: typ **External**, nazwa „Ratlas", Twój e-mail kontaktowy, logo `public/pwa-192x192.png`. Opublikuj aplikację (Publish app), żeby logować mogły się wszystkie osoby.
 3. Credentials → Create credentials → OAuth client ID → **Web application**.
-   - Authorized JavaScript origins: `https://ratlas.pages.dev`
+   - Authorized JavaScript origins: `https://ratlas.szczury.workers.dev`
    - Authorized redirect URIs: `https://<REF>.supabase.co/auth/v1/callback`
 4. Skopiuj Client ID i Client Secret → Supabase: Authentication → Sign In / Providers → Google → włącz i wklej.
 
-## 4. Cloudflare Pages (hosting aplikacji)
+## 4. Cloudflare Workers (hosting aplikacji)
+
+Cloudflare Pages jest teraz częścią Cloudflare Workers — aplikację wdrażamy jako Worker ze stronami statycznymi (konfiguracja w `wrangler.jsonc`).
 
 1. Załóż konto na https://dash.cloudflare.com (plan Free).
-2. W katalogu projektu utwórz `.env.production.local` (plik jest ignorowany przez git):
+2. Workers & Pages → Account details → **Subdomain** → ustaw nazwę konta (u nas: `szczury`). Adres aplikacji ma postać `https://ratlas.<nazwa-konta>.workers.dev`.
+3. W katalogu projektu utwórz `.env.production.local` (plik jest ignorowany przez git):
    ```
    VITE_SUPABASE_URL=https://<REF>.supabase.co
    VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
    ```
-3. Wdróż:
+4. Wdróż:
    ```bash
    npx wrangler login
-   npx wrangler pages project create ratlas --production-branch master
    npm run deploy
    ```
-4. Adres aplikacji: `https://ratlas.pages.dev` (jeśli nazwa jest zajęta, Cloudflare poda inny — użyj go poniżej).
+5. Adres aplikacji: `https://ratlas.szczury.workers.dev` (nowa subdomena zaczyna działać po kilku minutach).
 
 ## 5. Połącz adresy
 
 W Supabase: Authentication → URL Configuration:
-- Site URL: `https://ratlas.pages.dev`
-- Redirect URLs: `https://ratlas.pages.dev`, `http://localhost:5173`
+- Site URL: `https://ratlas.szczury.workers.dev`
+- Redirect URLs: `https://ratlas.szczury.workers.dev`, `http://localhost:5173`
 
 ## 6. Przed udostępnieniem ludziom
 
