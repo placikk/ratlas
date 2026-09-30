@@ -25,3 +25,6 @@ dist-ssr
 .wrangler/
 .env
 supabase/functions/.env
+
+eval/photos/
+eval/labels.csv

@@ -75,8 +75,21 @@ W Supabase: Authentication → URL Configuration:
 - W zainstalowanej aplikacji zaloguj się kodem z e-maila oraz przez Google, przejdź onboarding, sprawdź profil.
 - Na iPhonie sprawdź logowanie Google w zainstalowanej aplikacji (tryb standalone) — jeśli nie wraca zalogowany, używaj logowania kodem z e-maila.
 
+## 8. Zgłoszenia szczurów: funkcje serwerowe i Gemini
+
+1. Klucz Gemini: https://aistudio.google.com → **Get API key** → **Create API key** (darmowy, bez karty). Nie wklejaj go nigdzie poza poniższe miejsca.
+2. Lokalnie (testy i ocena modelu): wpisz go do `supabase/functions/.env` jako `GEMINI_API_KEY=…` i usuń linię `VERIFIER=fake`.
+3. Na produkcji (w swoim terminalu):
+   ```bash
+   npx supabase secrets set GEMINI_API_KEY=<klucz> GEMINI_MODEL=gemini-3.5-flash
+   npx supabase db push
+   npx supabase functions deploy submit-sighting retry-pending
+   npm run deploy
+   ```
+4. **Nigdy** nie ustawiaj `VERIFIER=fake` na produkcji — każde zdjęcie byłoby zaliczane.
+
 ## Kolejne wdrożenia
 
-`npm run deploy` (po `npx supabase db push`, jeśli doszły migracje).
+`npm run deploy` (po `npx supabase db push`, jeśli doszły migracje, i `npx supabase functions deploy submit-sighting retry-pending`, jeśli zmieniły się funkcje).
 
 Uwaga: nie używaj `npx supabase config push` — nadpisałby produkcyjne adresy (Site URL) ustawieniami lokalnymi.
