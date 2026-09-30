@@ -1,16 +1,16 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
 import { App } from './App'
 import { makeProfile } from './test/fixtures'
 
-const mocks = vi.hoisted(() => ({ useSession: vi.fn(), fetchMyProfile: vi.fn() }))
+const mocks = vi.hoisted(() => ({ useSession: vi.fn(), fetchMyProfile: vi.fn(), updateSettings: vi.fn() }))
 
 vi.mock('./auth/useSession', () => ({ useSession: mocks.useSession }))
 vi.mock('./profile/profileApi', () => ({
   fetchMyProfile: mocks.fetchMyProfile,
   completeOnboarding: vi.fn(),
-  updateSettings: vi.fn(),
+  updateSettings: mocks.updateSettings,
 }))
 vi.mock('./auth/authApi', () => ({
   signInWithGoogle: vi.fn(),
@@ -56,4 +56,16 @@ test('błąd ładowania profilu można ponowić', async () => {
   render(<App />)
   await userEvent.click(await screen.findByRole('button', { name: 'Spróbuj ponownie' }))
   expect(await screen.findByRole('button', { name: 'Mapa' })).toBeInTheDocument()
+})
+
+test('nieudane odświeżenie profilu nie zastępuje aplikacji ekranem błędu', async () => {
+  mocks.useSession.mockReturnValue(signedIn)
+  mocks.fetchMyProfile.mockResolvedValueOnce(makeProfile()).mockRejectedValue(new Error('offline'))
+  mocks.updateSettings.mockResolvedValue(undefined)
+  render(<App />)
+  await userEvent.click(await screen.findByRole('button', { name: 'Profil' }))
+  await userEvent.click(screen.getByRole('checkbox', { name: 'Pokazuj mój pseudonim na mapie' }))
+  await waitFor(() => expect(mocks.fetchMyProfile).toHaveBeenCalledTimes(2))
+  expect(screen.getByRole('button', { name: 'Mapa' })).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Spróbuj ponownie' })).not.toBeInTheDocument()
 })

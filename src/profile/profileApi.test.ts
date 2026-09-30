@@ -27,3 +27,8 @@ test('zajęty pseudonim jest zgłaszany', async () => {
   mocks.rpc.mockResolvedValue({ data: null, error: { code: '23505', message: 'duplicate key' } })
   await expect(completeOnboarding('Szczurek', false)).resolves.toEqual({ ok: false, reason: 'nickname_taken' })
 })
+
+test('ponowny onboarding (już zakończony) traktowany jest jako sukces', async () => {
+  mocks.rpc.mockResolvedValue({ data: null, error: { code: 'P0001', message: 'already onboarded' } })
+  await expect(completeOnboarding('Szczurek', false)).resolves.toEqual({ ok: true })
+})

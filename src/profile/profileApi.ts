@@ -37,6 +37,8 @@ export async function completeOnboarding(nickname: string, trainingConsent: bool
     p_training_consent: trainingConsent,
   })
   if (!error) return { ok: true }
+  // Onboarding już się udał (np. odpowiedź zginęła i użytkownik ponawia) — nie blokuj go.
+  if (error.code === 'P0001') return { ok: true }
   return { ok: false, reason: onboardingFailureFor(error.code) }
 }
 

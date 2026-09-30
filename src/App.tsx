@@ -15,7 +15,7 @@ export function App() {
 
 function SignedInApp({ userId }: { userId: string }) {
   const { profile, failed, reload } = useProfile(userId)
-  if (failed) return <Splash failed onRetry={reload} />
+  if (failed && !profile) return <Splash failed onRetry={reload} />
   if (!profile) return <Splash />
   if (!profile.terms_accepted_at) return <OnboardingScreen onDone={reload} />
   return <AppShell profile={profile} onProfileChange={reload} />

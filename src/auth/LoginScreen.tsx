@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { InstallHint } from '../install/InstallHint'
 import './LoginScreen.css'
 import { sendEmailCode, signInWithGoogle, verifyEmailCode } from './authApi'
 
@@ -48,6 +49,7 @@ export function LoginScreen() {
 
   return (
     <main className="screen login">
+      <InstallHint />
       <img className="login__logo" src="/logo.svg" alt="" width={112} height={112} />
       <h1>{t('app.name')}</h1>
       <p className="muted">{t('login.tagline')}</p>
