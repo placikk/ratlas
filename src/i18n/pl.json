@@ -99,7 +99,7 @@
       "location_denied": "Potrzebujemy lokalizacji, żeby zaznaczyć szczura na mapie. Zezwól na nią w ustawieniach przeglądarki.",
       "location_unavailable": "Nie udało się ustalić lokalizacji. Sprawdź, czy lokalizacja w telefonie jest włączona.",
       "location_inaccurate": "Nie udało się dokładnie ustalić lokalizacji. Wyjdź na otwartą przestrzeń i spróbuj ponownie.",
-      "offline": "Brak połączenia. Spróbuj ponownie, gdy złapiesz zasięg — zdjęcie zostało zapamiętane.",
+      "offline": "Brak połączenia. Spróbuj ponownie, gdy złapiesz zasięg (nie zamykaj tego ekranu — zdjęcie czeka).",
       "unknown": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
     }
   },
@@ -121,7 +121,7 @@
     "pending": "Nasz szczurzy ekspert jest chwilowo zajęty. Wynik zobaczysz w profilu przy następnym otwarciu aplikacji.",
     "rejectedTitle": "Nie zaliczone",
     "rejected": {
-      "no_rat": "Nie widzimy tu szczura. Spróbuj zrobić zdjęcie z trochę bliższej odległości.",
+      "no_rat": "Nie widzimy tu szczura. Spróbuj ujęcia, na którym szczur jest wyraźniej widoczny — z bezpiecznej odległości.",
       "screen_or_print": "To wygląda na zdjęcie ekranu albo wydruku — liczą się tylko prawdziwe szczury.",
       "toy_or_drawing": "To chyba zabawka albo rysunek 🙂",
       "verification_failed": "Nie udało się sprawdzić zdjęcia. Zrób nowe zdjęcie."
