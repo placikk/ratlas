@@ -1,12 +1,12 @@
 begin;
-select plan(9);
+select plan(10);
 
 insert into auth.users (id, email)
 values ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
        ('22222222-2222-2222-2222-222222222222', 'ola@example.com');
 
 select is(
-  (select count(*)::int from public.profiles),
+  (select count(*)::int from public.profiles where id in ('11111111-1111-1111-1111-111111111111','22222222-2222-2222-2222-222222222222')),
   2,
   'nowy użytkownik dostaje profil automatycznie'
 );
@@ -57,6 +57,13 @@ select throws_ok(
   '23505',
   null,
   'pseudonim jest unikalny bez względu na wielkość liter'
+);
+
+select throws_ok(
+  $$ select public.complete_onboarding(null, false) $$,
+  '23514',
+  null,
+  'onboarding bez pseudonimu jest odrzucany'
 );
 
 select throws_ok(

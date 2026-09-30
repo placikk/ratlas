@@ -10,7 +10,9 @@ create table public.profiles (
   terms_accepted_at timestamptz,
   created_at timestamptz not null default now(),
   constraint profiles_nickname_format
-    check (nickname is null or nickname ~ '^[A-Za-z0-9ĄĆĘŁŃÓŚŹŻąćęłńóśźż_-]{3,20}$')
+    check (nickname is null or nickname ~ '^[A-Za-z0-9ĄĆĘŁŃÓŚŹŻąćęłńóśźż_-]{3,20}$'),
+  constraint profiles_onboarded_has_nickname
+    check (terms_accepted_at is null or nickname is not null)
 );
 
 create unique index profiles_nickname_lower_idx on public.profiles (lower(nickname));
@@ -26,7 +28,7 @@ create policy "profiles: owner can update"
   using (id = (select auth.uid()))
   with check (id = (select auth.uid()));
 
--- Użytkownik może zmieniać tylko ustawienia; punkty i zgody zmienia wyłącznie serwer.
+-- Użytkownik może zmieniać tylko ustawienia; punkty, tokeny, pseudonim i akceptację regulaminu zmienia wyłącznie serwer.
 revoke all on public.profiles from anon, authenticated;
 grant select on public.profiles to authenticated;
 grant update (show_nickname_on_map, training_consent) on public.profiles to authenticated;
