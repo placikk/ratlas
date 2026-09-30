@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { InstallHint } from '../install/InstallHint'
 import { ProfileScreen } from '../profile/ProfileScreen'
 import type { Profile } from '../profile/profileApi'
+import { ReportScreen } from '../report/ReportScreen'
 import { ComingSoon } from './ComingSoon'
 import { TabBar, type Tab } from './TabBar'
 
@@ -16,6 +17,8 @@ export function AppShell({ profile, onProfileChange }: { profile: Profile; onPro
       <main>
         {tab === 'profile' ? (
           <ProfileScreen profile={profile} onChange={onProfileChange} />
+        ) : tab === 'report' ? (
+          <ReportScreen onRecorded={onProfileChange} />
         ) : (
           <ComingSoon title={t(`tabs.${tab}`)} />
         )}
