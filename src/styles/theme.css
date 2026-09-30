@@ -1,0 +1,33 @@
+:root {
+  --fur: #6b6a6e;
+  --fur-dark: #3a3839;
+  --fur-light: #d9d6d4;
+  --rose: #c98a8f;
+  --rose-dark: #a5646b;
+  --rose-light: #ebd3d3;
+  --bg: #f4f1ef;
+  --surface: #ffffff;
+  --danger: #b4504f;
+  --text: var(--fur-dark);
+  --text-muted: var(--fur);
+  --on-rose: #2a2627;
+  --radius: 16px;
+  --tabbar-height: 68px;
+  --font: 'Nunito', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fur: #9a989c;
+    --fur-dark: #e6e2e0;
+    --fur-light: #3a3839;
+    --rose: #d69ba0;
+    --rose-dark: #e5b3b7;
+    --rose-light: #4a3537;
+    --bg: #232122;
+    --surface: #2e2b2c;
+    --danger: #d77a78;
+    color-scheme: dark;
+  }
+}
