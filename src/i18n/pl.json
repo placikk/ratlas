@@ -1,0 +1,63 @@
+{
+  "app": {
+    "name": "Szczury Wrocławia",
+    "loading": "Wczytuję…",
+    "error": "Coś poszło nie tak.",
+    "retry": "Spróbuj ponownie"
+  },
+  "login": {
+    "tagline": "Wypatruj szczurów, zbieraj żetony, odkrywaj sekrety.",
+    "google": "Zaloguj przez Google",
+    "or": "albo e-mailem",
+    "emailLabel": "Adres e-mail",
+    "sendCode": "Wyślij kod",
+    "codeSent": "Wysłaliśmy kod na {{email}}. Sprawdź skrzynkę (także spam).",
+    "codeLabel": "Kod z e-maila",
+    "verify": "Zaloguj",
+    "changeEmail": "Zmień adres e-mail",
+    "sendFailed": "Nie udało się wysłać kodu. Spróbuj za chwilę.",
+    "invalidCode": "Kod jest nieprawidłowy albo wygasł."
+  },
+  "onboarding": {
+    "title": "Witaj w szczurzej ekipie!",
+    "safetyTitle": "Zanim zaczniesz",
+    "safetyText": "Nie dotykaj szczurów i nie wchodź na teren prywatny. Fotografuj z dystansu 🐀",
+    "nicknameLabel": "Twój pseudonim",
+    "nicknameHint": "3–20 znaków: litery, cyfry, _ lub -. Będzie widoczny w rankingu.",
+    "nicknameTooShort": "Pseudonim musi mieć co najmniej 3 znaki.",
+    "nicknameTooLong": "Pseudonim może mieć najwyżej 20 znaków.",
+    "nicknameBadChars": "Dozwolone są tylko litery, cyfry, _ i -.",
+    "nicknameTaken": "Ten pseudonim jest już zajęty.",
+    "age": "Mam ukończone 16 lat",
+    "termsAccept": "Akceptuję regulamin i politykę prywatności",
+    "read": "Przeczytaj:",
+    "training": "Zgadzam się na użycie moich zdjęć do trenowania modelu rozpoznającego szczury (opcjonalne, możesz to zmienić w profilu)",
+    "submit": "Zaczynamy!"
+  },
+  "tabs": {
+    "map": "Mapa",
+    "report": "Zgłoś",
+    "ranking": "Ranking",
+    "profile": "Profil"
+  },
+  "comingSoon": "Już wkrótce 🐀",
+  "profile": {
+    "rats": "Szczury",
+    "tokens": "Żetony",
+    "settings": "Ustawienia",
+    "showNickname": "Pokazuj mój pseudonim na mapie",
+    "trainingConsent": "Moje zdjęcia mogą pomóc trenować model rozpoznający szczury",
+    "saveFailed": "Nie udało się zapisać ustawień.",
+    "logout": "Wyloguj się"
+  },
+  "install": {
+    "title": "Zainstaluj aplikację",
+    "ios": "Stuknij „Udostępnij” na dole Safari, a potem „Dodaj do ekranu początkowego”.",
+    "dismiss": "Rozumiem"
+  },
+  "legal": {
+    "terms": "Regulamin",
+    "privacy": "Polityka prywatności",
+    "close": "Zamknij"
+  }
+}

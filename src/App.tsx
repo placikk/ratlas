@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+
 export function App() {
-  return <h1>Szczury Wrocławia</h1>
+  const { t } = useTranslation()
+  return <h1>{t('app.name')}</h1>
 }
