@@ -18,6 +18,11 @@ vi.mock('./auth/authApi', () => ({
   verifyEmailCode: vi.fn(),
   signOut: vi.fn(),
 }))
+vi.mock('./report/reportApi', () => ({ retryPending: vi.fn(async () => 0), submitSighting: vi.fn() }))
+vi.mock('./profile/ranksApi', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./profile/ranksApi')>()),
+  useRanks: () => [],
+}))
 
 const signedIn = { status: 'signedIn', session: { user: { id: 'u1' } } }
 

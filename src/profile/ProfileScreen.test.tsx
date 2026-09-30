@@ -13,6 +13,14 @@ vi.mock('../auth/authApi', () => ({
   sendEmailCode: vi.fn(),
   verifyEmailCode: vi.fn(),
 }))
+vi.mock('./ranksApi', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./ranksApi')>()),
+  useRanks: () => [
+    { id: 1, name: 'Szczurzy Nowicjusz', min_rats: 0 },
+    { id: 2, name: 'Podwórkowy Obserwator', min_rats: 5 },
+    { id: 3, name: 'Tropiciel z Nadodrza', min_rats: 15 },
+  ],
+}))
 
 test('pokazuje pseudonim i liczniki', () => {
   render(<ProfileScreen profile={makeProfile({ total_rats: 12, tokens_balance: 120 })} onChange={vi.fn()} />)
@@ -50,4 +58,11 @@ test('otwiera poradnik instalacji', async () => {
   render(<ProfileScreen profile={makeProfile()} onChange={vi.fn()} />)
   await userEvent.click(screen.getByRole('button', { name: 'Jak zainstalować aplikację' }))
   expect(screen.getByRole('dialog', { name: 'Jak zainstalować Ratlas' })).toBeInTheDocument()
+})
+
+test('pokazuje rangę i postęp do następnej', () => {
+  render(<ProfileScreen profile={makeProfile({ total_rats: 12 })} onChange={vi.fn()} />)
+  expect(screen.getByText('Podwórkowy Obserwator')).toBeInTheDocument()
+  expect(screen.getByText('Jeszcze 3 szczury do rangi „Tropiciel z Nadodrza”')).toBeInTheDocument()
+  expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '70')
 })

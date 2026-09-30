@@ -48,7 +48,13 @@
     "showNickname": "Pokazuj mój pseudonim na mapie",
     "trainingConsent": "Moje zdjęcia mogą pomóc trenować model rozpoznający szczury",
     "saveFailed": "Nie udało się zapisać ustawień.",
-    "logout": "Wyloguj się"
+    "logout": "Wyloguj się",
+    "rank": "Ranga",
+    "toNextRank_one": "Jeszcze {{count}} szczur do rangi „{{rank}}”",
+    "toNextRank_few": "Jeszcze {{count}} szczury do rangi „{{rank}}”",
+    "toNextRank_many": "Jeszcze {{count}} szczurów do rangi „{{rank}}”",
+    "toNextRank_other": "Jeszcze {{count}} szczura do rangi „{{rank}}”",
+    "topRank": "Najwyższa ranga — jesteś legendą!"
   },
   "install": {
     "title": "Zainstaluj Ratlas",
