@@ -61,7 +61,7 @@ Cloudflare Pages jest teraz częścią Cloudflare Workers — aplikację wdraża
 
 W Supabase: Authentication → URL Configuration:
 - Site URL: `https://ratlas.szczury.workers.dev`
-- Redirect URLs: `https://ratlas.szczury.workers.dev`, `http://localhost:5173`
+- Redirect URLs: `https://ratlas.szczury.workers.dev` (bez localhost — lokalna wersja korzysta z lokalnego Supabase)
 
 ## 6. Przed udostępnieniem ludziom
 
