@@ -9,8 +9,16 @@ export function isIos(env: InstallEnv): boolean {
   return /iPad|iPhone|iPod/.test(env.userAgent) || (/Macintosh/.test(env.userAgent) && env.maxTouchPoints > 1)
 }
 
-export function shouldShowIosInstallHint(env: InstallEnv, dismissed: boolean): boolean {
-  return isIos(env) && !env.standalone && !dismissed
+export type Platform = 'ios' | 'android' | 'other'
+
+export function detectPlatform(env: InstallEnv): Platform {
+  if (isIos(env)) return 'ios'
+  if (/Android/.test(env.userAgent)) return 'android'
+  return 'other'
+}
+
+export function shouldShowInstallHint(env: InstallEnv, dismissed: boolean): boolean {
+  return detectPlatform(env) !== 'other' && !env.standalone && !dismissed
 }
 
 export function readInstallEnv(): InstallEnv {

@@ -8,6 +8,9 @@ import './i18n'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App'
+import { listenForInstallPrompt } from './install/installPrompt'
+
+listenForInstallPrompt()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

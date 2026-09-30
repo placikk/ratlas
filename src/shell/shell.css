@@ -106,3 +106,13 @@
     animation: none;
   }
 }
+
+.install-guide__section summary {
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.install-guide__section ol {
+  margin: 8px 0;
+  padding-left: 22px;
+}

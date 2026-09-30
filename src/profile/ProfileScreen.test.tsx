@@ -45,3 +45,9 @@ test('wylogowuje', async () => {
   await userEvent.click(screen.getByRole('button', { name: 'Wyloguj się' }))
   expect(signOut).toHaveBeenCalled()
 })
+
+test('otwiera poradnik instalacji', async () => {
+  render(<ProfileScreen profile={makeProfile()} onChange={vi.fn()} />)
+  await userEvent.click(screen.getByRole('button', { name: 'Jak zainstalować aplikację' }))
+  expect(screen.getByRole('dialog', { name: 'Jak zainstalować Ratlas' })).toBeInTheDocument()
+})

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { signOut } from '../auth/authApi'
+import { InstallGuide } from '../install/InstallGuide'
+import { detectPlatform, readInstallEnv } from '../install/platform'
 import { LegalModal, type LegalDoc } from '../legal/LegalModal'
 import { updateSettings, type Profile, type ProfileSettings } from './profileApi'
 
@@ -8,6 +10,8 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
   const { t } = useTranslation()
   const [saveFailed, setSaveFailed] = useState(false)
   const [openDoc, setOpenDoc] = useState<LegalDoc | null>(null)
+  const [guideOpen, setGuideOpen] = useState(false)
+  const installEnv = readInstallEnv()
 
   async function save(patch: Partial<ProfileSettings>) {
     setSaveFailed(false)
@@ -69,11 +73,18 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
         </button>
       </div>
 
+      {!installEnv.standalone && (
+        <button className="btn--link" type="button" onClick={() => setGuideOpen(true)}>
+          {t('install.guideLink')}
+        </button>
+      )}
+
       <button className="btn btn--ghost" type="button" onClick={() => void signOut().catch(() => undefined)}>
         {t('profile.logout')}
       </button>
 
       {openDoc && <LegalModal doc={openDoc} onClose={() => setOpenDoc(null)} />}
+      {guideOpen && <InstallGuide platform={detectPlatform(installEnv)} onClose={() => setGuideOpen(false)} />}
     </section>
   )
 }

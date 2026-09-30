@@ -51,9 +51,29 @@
     "logout": "Wyloguj się"
   },
   "install": {
-    "title": "Zainstaluj aplikację",
-    "ios": "Stuknij „Udostępnij” na dole Safari, a potem „Dodaj do ekranu początkowego”.",
-    "dismiss": "Rozumiem"
+    "title": "Zainstaluj Ratlas",
+    "why": "Z ikoną na ekranie telefonu Ratlas działa jak zwykła aplikacja — na pełnym ekranie, bez paska przeglądarki.",
+    "installNow": "Zainstaluj",
+    "howTo": "Jak to zrobić?",
+    "dismiss": "Nie teraz",
+    "guideLink": "Jak zainstalować aplikację",
+    "guideTitle": "Jak zainstalować Ratlas",
+    "android": "Android",
+    "androidSteps": [
+      "Otwórz Ratlas w przeglądarce Chrome.",
+      "Stuknij ⋮ (trzy kropki) w prawym górnym rogu.",
+      "Wybierz „Zainstaluj aplikację” — albo „Dodaj do ekranu głównego”, a potem „Zainstaluj”.",
+      "Uruchamiaj Ratlas z ikony szczura na ekranie telefonu."
+    ],
+    "samsung": "W przeglądarce Samsung Internet: menu ☰ → „Dodaj stronę do” → „Ekran startowy”.",
+    "ios": "iPhone / iPad",
+    "iosSteps": [
+      "Otwórz Ratlas w Safari.",
+      "Stuknij „Udostępnij” (kwadrat ze strzałką w górę) na dolnym pasku.",
+      "Przewiń listę w dół i wybierz „Do ekranu początkowego”, a potem „Dodaj”.",
+      "Uruchom Ratlas z ikony szczura i zaloguj się jeszcze raz — zainstalowana aplikacja ma osobną pamięć niż Safari."
+    ],
+    "close": "Zamknij"
   },
   "legal": {
     "terms": "Regulamin",
