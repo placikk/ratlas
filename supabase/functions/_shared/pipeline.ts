@@ -19,9 +19,16 @@ export async function parseSightingForm(form: FormData): Promise<ParsedSighting>
     return { ok: false }
   }
 
-  const lat = Number(form.get('lat'))
-  const lon = Number(form.get('lon'))
-  const accuracyM = Number(form.get('accuracy'))
+  const rawLat = form.get('lat')
+  const rawLon = form.get('lon')
+  const rawAccuracy = form.get('accuracy')
+  // Number(null) i Number('') dają 0 — brakujące pole nie może przejść jako „0”.
+  for (const raw of [rawLat, rawLon, rawAccuracy]) {
+    if (typeof raw !== 'string' || raw.trim() === '') return { ok: false }
+  }
+  const lat = Number(rawLat)
+  const lon = Number(rawLon)
+  const accuracyM = Number(rawAccuracy)
   const capturedAt = Date.parse(String(form.get('capturedAt') ?? ''))
   if (
     !Number.isFinite(lat) || lat < -90 || lat > 90 ||

@@ -38,6 +38,9 @@ test.each([
   ['długość nie jest liczbą', { lon: 'abc' }],
   ['ujemna dokładność', { accuracy: '-1' }],
   ['zła data', { capturedAt: 'wczoraj' }],
+  ['brak dokładności', { accuracy: null }],
+  ['puste lat', { lat: '' }],
+  ['lon z samych spacji', { lon: '  ' }],
 ])('odrzuca: %s', async (_name, overrides) => {
   expect(await parseSightingForm(form(overrides))).toEqual({ ok: false })
 })
