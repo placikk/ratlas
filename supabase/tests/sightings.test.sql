@@ -1,5 +1,5 @@
 begin;
-select plan(33);
+select plan(39);
 
 insert into auth.users (id, email)
 values ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
@@ -13,6 +13,7 @@ insert into v values
   ('nine', '{"ratCount":9,"isSelfie":false,"isScreenOrPrint":false,"isToyOrDrawing":false,"hasThirdPartyFaces":false,"tags":[],"raw":{}}'),
   ('none', '{"ratCount":0,"isSelfie":false,"isScreenOrPrint":false,"isToyOrDrawing":false,"hasThirdPartyFaces":false,"tags":[],"raw":{}}'),
   ('screen', '{"ratCount":1,"isSelfie":false,"isScreenOrPrint":true,"isToyOrDrawing":false,"hasThirdPartyFaces":false,"tags":[],"raw":{}}'),
+  ('faces', '{"ratCount":2,"isSelfie":false,"isScreenOrPrint":false,"isToyOrDrawing":false,"hasThirdPartyFaces":true,"tags":[],"raw":{}}'),
   ('selfie', '{"ratCount":1,"isSelfie":true,"isScreenOrPrint":false,"isToyOrDrawing":false,"hasThirdPartyFaces":false,"tags":[],"raw":{}}');
 
 -- 1–3: precheck
@@ -119,6 +120,15 @@ select is(
   'selfie jest zaliczone, ale nie trafia na publiczną mapę'
 );
 
+-- zdjęcie z twarzą osoby trzeciej: zaliczone, ale nie publiczne
+select is(
+  (select row(r ->> 'status', r ->> 'public_on_map')::text
+     from (select public.record_sighting('bbbbbbbb-0000-0000-0000-000000000007', '11111111-1111-1111-1111-111111111111', 17.0700, 51.1300, 10, now(),
+       'sightings-private', '1111/b7.jpg', '0f0f0f0f0f0f0f0f', 'fake', (select value from v where name = 'faces')) as r) as x),
+  row('accepted', 'false')::text,
+  'twarz osoby trzeciej: zaliczone, ale nie na publiczną mapę'
+);
+
 -- 18–23: pending → resolve (idempotentnie)
 select is(
   public.record_sighting('bbbbbbbb-0000-0000-0000-000000000004', '22222222-2222-2222-2222-222222222222', 17.0590, 51.1110, 10, now(),
@@ -128,14 +138,34 @@ select is(
 );
 select is(
   (select array_agg(id) from public.list_pending_sightings('22222222-2222-2222-2222-222222222222')),
+  null,
+  'świeże zgłoszenie czeka godzinę, zanim trafi na listę zaległych'
+);
+update public.sightings set created_at = now() - interval '2 hours' where id = 'bbbbbbbb-0000-0000-0000-000000000004';
+select is(
+  (select array_agg(id) from public.list_pending_sightings('22222222-2222-2222-2222-222222222222')),
   array['bbbbbbbb-0000-0000-0000-000000000004'::uuid],
   'lista zaległych zgłoszeń'
 );
+-- Cofnięcie daty (w pobliżu północy 2 h wstecz wypadłoby we wczorajszy dzień i zaburzyło dzienny limit).
+update public.sightings set created_at = now() where id = 'bbbbbbbb-0000-0000-0000-000000000004';
+create temporary table first_resolve as
+  select public.resolve_pending('bbbbbbbb-0000-0000-0000-000000000004', 'map-photos', 'bbbbbbbb-0000-0000-0000-000000000004.jpg', 'gemini',
+    (select value from v where name = 'three')) as r;
 select is(
-  public.resolve_pending('bbbbbbbb-0000-0000-0000-000000000004', 'map-photos', 'bbbbbbbb-0000-0000-0000-000000000004.jpg', 'gemini',
-    (select value from v where name = 'three')) ->> 'tokens_awarded',
+  (select r ->> 'tokens_awarded' from first_resolve),
   '30',
   'rozstrzygnięte zgłoszenie daje raciki'
+);
+select is(
+  (select r ->> 'applied' from first_resolve),
+  'true',
+  'pierwsze rozstrzygnięcie zgłasza applied = true'
+);
+select is(
+  (select public.resolve_pending('bbbbbbbb-0000-0000-0000-000000000004', 'map-photos', 'y.jpg', 'gemini', (select value from v where name = 'three')) ->> 'applied'),
+  'false',
+  'powtórne rozstrzygnięcie zgłasza applied = false'
 );
 select is(
   (select row(total_rats, tokens_balance)::text from public.profiles where id = '22222222-2222-2222-2222-222222222222'),
@@ -154,11 +184,25 @@ select is(
 );
 
 -- 24: nieudane weryfikacje
+select public.record_sighting('bbbbbbbb-0000-0000-0000-000000000005', '22222222-2222-2222-2222-222222222222', 17.0590, 51.1110, 10, now(),
+  'sightings-private', '2222/b5.jpg', '0123456789abcdef', 'gemini', null);
+update public.sightings set created_at = now() - interval '2 hours' where id = 'bbbbbbbb-0000-0000-0000-000000000005';
+select public.fail_verification('bbbbbbbb-0000-0000-0000-000000000005');
+select is(
+  (select array_agg(id) from public.list_pending_sightings('22222222-2222-2222-2222-222222222222')),
+  null,
+  'po nieudanej próbie zgłoszenie nie wraca na listę od razu'
+);
+update public.sightings set last_verify_attempt_at = now() - interval '3 hours' where id = 'bbbbbbbb-0000-0000-0000-000000000005';
+select is(
+  (select array_agg(id) from public.list_pending_sightings('22222222-2222-2222-2222-222222222222')),
+  array['bbbbbbbb-0000-0000-0000-000000000005'::uuid],
+  'po 2 h od próby (odstęp po pierwszej porażce) zgłoszenie wraca na listę'
+);
+update public.sightings set created_at = now() where id = 'bbbbbbbb-0000-0000-0000-000000000005';
 do $$
 begin
-  perform public.record_sighting('bbbbbbbb-0000-0000-0000-000000000005', '22222222-2222-2222-2222-222222222222', 17.0590, 51.1110, 10, now(),
-    'sightings-private', '2222/b5.jpg', '0123456789abcdef', 'gemini', null);
-  perform public.fail_verification('bbbbbbbb-0000-0000-0000-000000000005') from generate_series(1, 5);
+  perform public.fail_verification('bbbbbbbb-0000-0000-0000-000000000005') from generate_series(1, 4);
 end;
 $$;
 select is(
@@ -244,8 +288,8 @@ set local role authenticated;
 set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
 select is(
   (select count(*)::int from public.sightings) + (select count(*)::int from public.token_ledger) * 100,
-  203,
-  'użytkownik widzi tylko swoje 3 zgłoszenia i 2 wpisy dziennika (cooldown nie daje wpisu)'
+  304,
+  'użytkownik widzi tylko swoje 4 zgłoszenia i 3 wpisy dziennika (cooldown nie daje wpisu)'
 );
 
 select * from finish();

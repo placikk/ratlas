@@ -23,7 +23,8 @@ create table public.sightings (
   hidden boolean not null default false,
   verifier text,
   verifier_raw jsonb,
-  verify_attempts integer not null default 0
+  verify_attempts integer not null default 0,
+  last_verify_attempt_at timestamptz
 );
 
 create index sightings_user_created_idx on public.sightings (user_id, created_at desc);
@@ -265,14 +266,21 @@ language plpgsql
 security definer
 set search_path = ''
 as $$
+declare
+  v_applied boolean;
 begin
+  -- Wiersz zmienia tylko pierwsze wywołanie: UPDATE jest ograniczony do `pending`,
+  -- a równoległe wywołanie czeka na blokadę i po jej zwolnieniu nie znajduje już wiersza.
   update public.sightings
      set photo_bucket = p_photo_bucket,
          photo_path = p_photo_path
    where id = p_id and status = 'pending';
+  v_applied := found;
 
-  perform public.apply_verification(p_id, p_verification, p_verifier);
-  return public.sighting_result(p_id);
+  if v_applied then
+    perform public.apply_verification(p_id, p_verification, p_verifier);
+  end if;
+  return public.sighting_result(p_id) || jsonb_build_object('applied', v_applied);
 end;
 $$;
 
@@ -285,6 +293,7 @@ as $$
 begin
   update public.sightings
      set verify_attempts = verify_attempts + 1,
+         last_verify_attempt_at = now(),
          status = case when verify_attempts + 1 >= public.config_int('max_verify_attempts') then 'rejected' else status end,
          reject_reason = case when verify_attempts + 1 >= public.config_int('max_verify_attempts') then 'verification_failed' else reject_reason end
    where id = p_id and status = 'pending';
@@ -303,6 +312,8 @@ as $$
   select s.id, s.photo_bucket, s.photo_path
     from public.sightings s
    where s.user_id = p_user_id and s.status = 'pending'
+     -- Rosnący odstęp: 1 h, 2 h, 4 h, 8 h, 16 h od poprzedniej próby.
+     and coalesce(s.last_verify_attempt_at, s.created_at) < now() - interval '1 hour' * power(2, s.verify_attempts)
    order by s.created_at
    limit 5
 $$;

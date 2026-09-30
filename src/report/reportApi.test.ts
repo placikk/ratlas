@@ -56,3 +56,18 @@ test('retryPending zwraca liczbę rozstrzygniętych, a przy błędzie 0', async 
   mocks.invoke.mockResolvedValueOnce({ data: null, error: new FunctionsFetchError(new TypeError('x')) })
   expect(await retryPending()).toBe(0)
 })
+
+test('równoległe wywołania retryPending wysyłają jedno zapytanie', async () => {
+  let release: (value: unknown) => void = () => {}
+  mocks.invoke.mockReturnValueOnce(new Promise((resolve) => (release = resolve)))
+  const first = retryPending()
+  const second = retryPending()
+  release({ data: { resolved: 1 }, error: null })
+  expect(await first).toBe(1)
+  expect(await second).toBe(1)
+  expect(mocks.invoke).toHaveBeenCalledTimes(1)
+
+  mocks.invoke.mockResolvedValueOnce({ data: { resolved: 0 }, error: null })
+  expect(await retryPending()).toBe(0)
+  expect(mocks.invoke).toHaveBeenCalledTimes(2)
+})

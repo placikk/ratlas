@@ -46,8 +46,18 @@ export async function submitSighting(photo: Blob, fix: Fix, capturedAt: Date): P
   return toSubmitResult(data)
 }
 
-export async function retryPending(): Promise<number> {
-  const { data, error } = await supabase.functions.invoke('retry-pending', { body: {} })
-  if (error) return 0
-  return Number((data as { resolved?: number } | null)?.resolved ?? 0)
+let retryInFlight: Promise<number> | null = null
+
+// Jedno wywołanie naraz (np. podwójny efekt w StrictMode): drugi wołający dostaje ten sam wynik.
+export function retryPending(): Promise<number> {
+  retryInFlight ??= (async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('retry-pending', { body: {} })
+      if (error) return 0
+      return Number((data as { resolved?: number } | null)?.resolved ?? 0)
+    } finally {
+      retryInFlight = null
+    }
+  })()
+  return retryInFlight
 }
