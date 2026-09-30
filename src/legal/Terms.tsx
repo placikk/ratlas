@@ -8,8 +8,8 @@ export function Terms() {
 
       <h3>1. Czym jest aplikacja</h3>
       <p>
-        Szczury Wrocławia to bezpłatna aplikacja, w której mieszkańcy Wrocławia fotografują napotkane szczury, zbierają
-        punkty i żetony oraz poznają ciekawostki o szczurach. Aplikację prowadzi {LEGAL.adminName}.
+        Ratlas to bezpłatna aplikacja, w której mieszkańcy Wrocławia fotografują napotkane szczury, zbierają
+        punkty i raciki (żetony w grze) oraz poznają ciekawostki o szczurach. Aplikację prowadzi {LEGAL.adminName}.
       </p>
 
       <h3>2. Konto</h3>
@@ -35,11 +35,11 @@ export function Terms() {
         choroby — fotografuj z dystansu.
       </p>
 
-      <h3>5. Punkty i żetony</h3>
+      <h3>5. Punkty i raciki</h3>
       <ul>
-        <li>Punkty i żetony nie mają wartości pieniężnej i nie podlegają wymianie na pieniądze.</li>
+        <li>Punkty i raciki nie mają wartości pieniężnej i nie podlegają wymianie na pieniądze.</li>
         <li>
-          Oszukiwanie (np. zdjęcia ekranu, cudze zdjęcia, wiele kont) może skutkować odebraniem punktów i żetonów albo
+          Oszukiwanie (np. zdjęcia ekranu, cudze zdjęcia, wiele kont) może skutkować odebraniem punktów i racików albo
           zablokowaniem konta.
         </li>
       </ul>

@@ -1,12 +1,12 @@
 {
   "app": {
-    "name": "Szczury Wrocławia",
+    "name": "Ratlas",
     "loading": "Wczytuję…",
     "error": "Coś poszło nie tak.",
     "retry": "Spróbuj ponownie"
   },
   "login": {
-    "tagline": "Wypatruj szczurów, zbieraj żetony, odkrywaj sekrety.",
+    "tagline": "Szczurza mapa Wrocławia. Wypatruj szczurów, zbieraj raciki, odkrywaj sekrety.",
     "google": "Zaloguj przez Google",
     "or": "albo e-mailem",
     "emailLabel": "Adres e-mail",
@@ -43,7 +43,7 @@
   "comingSoon": "Już wkrótce 🐀",
   "profile": {
     "rats": "Szczury",
-    "tokens": "Żetony",
+    "tokens": "Raciki",
     "settings": "Ustawienia",
     "showNickname": "Pokazuj mój pseudonim na mapie",
     "trainingConsent": "Moje zdjęcia mogą pomóc trenować model rozpoznający szczury",

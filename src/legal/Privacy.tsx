@@ -14,7 +14,7 @@ export function Privacy() {
       <h3>2. Jakie dane przetwarzamy i po co</h3>
       <ul>
         <li>Adres e-mail i identyfikator konta Google — logowanie (art. 6 ust. 1 lit. b RODO).</li>
-        <li>Pseudonim, liczba szczurów, żetony, osiągnięcia — działanie gry i rankingu (art. 6 ust. 1 lit. b RODO).</li>
+        <li>Pseudonim, liczba szczurów, raciki, osiągnięcia — działanie gry i rankingu (art. 6 ust. 1 lit. b RODO).</li>
         <li>
           Zdjęcia, lokalizacja i czas zgłoszeń — weryfikacja zgłoszeń, mapa i ochrona przed oszustwami (art. 6 ust. 1 lit. b
           i f RODO).

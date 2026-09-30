@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import i18n from './index'
 
 test('zwraca polskie teksty', () => {
-  expect(i18n.t('app.name')).toBe('Szczury Wrocławia')
+  expect(i18n.t('app.name')).toBe('Ratlas')
 })
 
 test('wstawia zmienne do tekstu', () => {

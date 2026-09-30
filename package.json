@@ -1,5 +1,5 @@
 {
-  "name": "szczury-wroclaw",
+  "name": "ratlas",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,7 +15,7 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "test:db": "supabase test db",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name szczury-wroclaw"
+    "deploy": "npm run build && wrangler pages deploy dist --project-name ratlas"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.3.0",

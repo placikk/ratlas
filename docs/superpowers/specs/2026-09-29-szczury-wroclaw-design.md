@@ -1,12 +1,13 @@
-# Szczury Wrocławia — projekt aplikacji
+# Ratlas — projekt aplikacji
 
 **Data:** 2026-09-29
 **Status:** projekt zatwierdzony sekcjami w rozmowie, czeka na przegląd spisanej wersji
-**Nazwa robocza:** Szczury Wrocławia
+**Nazwa:** Ratlas (rat + atlas — „szczurza mapa Wrocławia”; wcześniej robocza nazwa „Szczury Wrocławia”)
+**Waluta w grze:** raciki (odmiana: 1 racik, 2 raciki, 5 racików) — w interfejsie zawsze „raciki”; w kodzie i bazie nazwy techniczne `tokens*` pozostają bez zmian
 
 ## 1. Cel i założenia
 
-Aplikacja dla mieszkańców Wrocławia: robisz zdjęcie szczura, model AI potwierdza, że to szczur (i ile ich jest), dostajesz punkty do licznika i żetony wymieniane na materiały edukacyjne. Mapa pokazuje ostatnie obserwacje, które z czasem zanikają. Grywalizacja: rangi, ranking, jawne i ukryte osiągnięcia.
+Aplikacja dla mieszkańców Wrocławia: robisz zdjęcie szczura, model AI potwierdza, że to szczur (i ile ich jest), dostajesz punkty do licznika i raciki wymieniane na materiały edukacyjne. Mapa pokazuje ostatnie obserwacje, które z czasem zanikają. Grywalizacja: rangi, ranking, jawne i ukryte osiągnięcia.
 
 **Założenia nadrzędne:**
 - Docelowo prawdziwy, publiczny produkt dla Wrocławia.
@@ -52,9 +53,9 @@ Aplikacja dla mieszkańców Wrocławia: robisz zdjęcie szczura, model AI potwie
 ### Moduły frontendu
 - **Kamera**: podgląd na żywo (`getUserMedia`), przełączanie na przedni aparat, zrobienie zdjęcia, kompresja, GPS.
 - **Mapa**: pinezki z zanikaniem, gniazda (klastry), panel szczegółów.
-- **Profil**: licznik, ranga + pasek postępu, żetony, osiągnięcia, ustawienia.
+- **Profil**: licznik, ranga + pasek postępu, raciki, osiągnięcia, ustawienia.
 - **Ranking**: zakładki Miesięczny / Ogólny.
-- **Szczurza Biblioteka**: sklep za żetony i odblokowane treści.
+- **Szczurza Biblioteka**: sklep za raciki i odblokowane treści.
 - **Onboarding**: logowanie, pseudonim, zgody, komunikat o bezpieczeństwie, instrukcja instalacji PWA (szczególnie iOS).
 
 ### Moduły backendu
@@ -101,7 +102,7 @@ Odpowiedź modelu walidowana schematem (zod). Niepoprawna odpowiedź = błąd we
 | 4 | Duplikat: hash percepcyjny vs zdjęcia z ostatnich 30 dni (odległość Hamminga ≤ próg) | `rejected: duplicate` |
 | 5 | `RatVerifier.verify` | `rejected: no_rat` / `screen_or_print` / `toy_or_drawing`; błąd → `pending` |
 | 6 | Cooldown: ten sam użytkownik, ≤ 50 m, ≤ 30 min od poprzedniego zaliczonego | `accepted_no_points` (pinezka jest, punktów nie ma) |
-| 7 | `award_sighting` w jednej transakcji: szczury = `min(ratCount, 5)`, żetony, osiągnięcia, dziennik żetonów | `accepted` |
+| 7 | `award_sighting` w jednej transakcji: szczury = `min(ratCount, 5)`, raciki, osiągnięcia, dziennik racików | `accepted` |
 
 Wszystkie progi pochodzą z `app_config`.
 
@@ -114,7 +115,7 @@ Wszystkie progi pochodzą z `app_config`.
 - Odrzucone zdjęcia usuwane automatycznie po 30 dniach.
 
 ### Ekran wyniku
-Animacja „+3 szczury · +30 żetonów”; przy nowym ukrytym osiągnięciu osobny efekt „Odkryłeś sekretne osiągnięcie!”. Dla `pending`: „Sprawdzamy Twojego szczura, damy znać” — wynik pojawia się w profilu po ponownej weryfikacji.
+Animacja „+3 szczury · +30 racików”; przy nowym ukrytym osiągnięciu osobny efekt „Odkryłeś sekretne osiągnięcie!”. Dla `pending`: „Sprawdzamy Twojego szczura, damy znać” — wynik pojawia się w profilu po ponownej weryfikacji.
 
 ### Zgłaszanie nadużyć
 Każdą pinezkę można zgłosić (jedna osoba — jedno zgłoszenie na pinezkę). Po 3 zgłoszeniach od różnych osób pinezka dostaje `hidden = true` i czeka na decyzję admina w panelu Supabase (bez własnego panelu admina na start). Admin może cofnąć punkty przez wpis korygujący w `token_ledger`.
@@ -162,9 +163,9 @@ Każdą pinezkę można zgłosić (jedna osoba — jedno zgłoszenie na pinezkę
 | 500 | Król Szczurów Wrocławia |
 
 ### Osiągnięcia jawne
-Pierwszy szczur; 10 / 50 / 100 szczurów; Gniazdo (5 szczurów na jednym zdjęciu); Seria (zaliczony szczur 7 dni z rzędu). Nagroda 25–50 żetonów.
+Pierwszy szczur; 10 / 50 / 100 szczurów; Gniazdo (5 szczurów na jednym zdjęciu); Seria (zaliczony szczur 7 dni z rzędu). Nagroda 25–50 racików.
 
-### Osiągnięcia ukryte (nagroda 50–100 żetonów)
+### Osiągnięcia ukryte (nagroda 50–100 racików)
 
 | Osiągnięcie | Reguła |
 |---|---|
@@ -182,7 +183,7 @@ W profilu ukryte osiągnięcia wyglądają jak „???”, z licznikiem „Zosta�
 Typy reguł obsługiwane w kodzie: `flag` (pole wyniku weryfikacji), `tag`, `total_rats_gte`, `rats_in_photo_gte`, `hour_between`, `streak_days_gte`, `near_geometry`. Nowe osiągnięcie istniejącego typu = nowy wiersz w `achievements` (+ ewentualnie nowy tag na zamkniętej liście w poleceniu dla modelu). Osiągnięcia oceniane są tylko dla zgłoszeń `accepted` (nie dla `accepted_no_points`).
 
 ### Ekonomia (domyślne wartości w `app_config`)
-10 żetonów za szczura; osiągnięcia jak wyżej. Orientacyjne ceny: karta wiedzy ~30, quiz ~50, kosmetyka 100–300.
+10 racików za szczura; osiągnięcia jak wyżej. Orientacyjne ceny: karta wiedzy ~30, quiz ~50, kosmetyka 100–300.
 
 ### Ranking
 Zakładki Miesięczny i Ogólny; wartość = suma `rats_awarded`. Pokazujemy top 50 + pozycję zalogowanego użytkownika. Remis: wyżej ten, kto osiągnął wynik wcześniej.
@@ -265,7 +266,7 @@ Zakładki Miesięczny i Ogólny; wartość = suma `rats_awarded`. Pokazujemy top
 - Szkielet PWA (instalowalność, ikona, paleta, i18n, onboarding z instrukcją dla iOS).
 - Logowanie Google + kod z e-maila, pseudonim, zgody.
 - Zgłoszenie szczura z pełną ochroną z sekcji 4 i `VlmVerifier`.
-- Licznik, żetony, rangi, profil.
+- Licznik, raciki, rangi, profil.
 - Mapa z zanikaniem, znacznikami i panelem szczegółów; zgłaszanie nadużyć.
 - Ranking miesięczny i ogólny.
 - Osiągnięcia jawne i ukryte z sekcji 6.

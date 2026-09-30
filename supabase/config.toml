@@ -254,11 +254,11 @@ otp_expiry = 3600
 # content_path = "./supabase/templates/password_changed_notification.html"
 
 [auth.email.template.magic_link]
-subject = "Twój kod logowania – Szczury Wrocławia"
+subject = "Twój kod logowania – Ratlas"
 content_path = "./supabase/templates/otp.html"
 
 [auth.email.template.confirmation]
-subject = "Twój kod logowania – Szczury Wrocławia"
+subject = "Twój kod logowania – Ratlas"
 content_path = "./supabase/templates/otp.html"
 
 [auth.sms]

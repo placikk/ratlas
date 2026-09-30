@@ -1,6 +1,6 @@
-# Szczury Wrocławia
+# Ratlas
 
-PWA, w której mieszkańcy Wrocławia fotografują szczury, zbierają żetony i odkrywają sekretne osiągnięcia.
+Szczurza mapa Wrocławia — PWA, w której mieszkańcy fotografują szczury, zbierają raciki (żetony w grze) i odkrywają sekretne osiągnięcia.
 
 - Specyfikacja: `docs/superpowers/specs/2026-09-29-szczury-wroclaw-design.md`
 - Plany implementacji: `docs/superpowers/plans/`

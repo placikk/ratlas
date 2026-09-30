@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo.svg', 'apple-touch-icon-180x180.png'],
       manifest: {
-        name: 'Szczury Wrocławia',
-        short_name: 'Szczury',
-        description: 'Wypatruj szczurów we Wrocławiu, zbieraj żetony i odkrywaj sekretne osiągnięcia.',
+        name: 'Ratlas',
+        short_name: 'Ratlas',
+        description: 'Szczurza mapa Wrocławia: wypatruj szczurów, zbieraj raciki i odkrywaj sekretne osiągnięcia.',
         lang: 'pl',
         start_url: '/',
         scope: '/',
