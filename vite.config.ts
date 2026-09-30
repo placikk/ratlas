@@ -32,7 +32,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', 'supabase/functions/**/*.test.ts', 'scripts/**/*.test.ts'],
     mockReset: true,
     env: {
       VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
