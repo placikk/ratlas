@@ -76,7 +76,7 @@ export function createGeminiVerifier(options: {
         throw new VerifierUnavailableError(`Gemini: brak odpowiedzi (${String(error)})`)
       }
 
-      if (response.status === 429 || response.status >= 500) {
+      if (response.status === 408 || response.status === 429 || response.status >= 500) {
         throw new VerifierUnavailableError(`Gemini: HTTP ${response.status}`)
       }
       if (!response.ok) {
@@ -84,9 +84,9 @@ export function createGeminiVerifier(options: {
         throw new Error(`Gemini: HTTP ${response.status} ${await response.text()}`)
       }
 
-      const json = (await response.json()) as GeminiResponse
-      const text = json.candidates?.[0]?.content?.parts?.find((part) => typeof part.text === 'string' && !part.thought)?.text
       try {
+        const json = (await response.json()) as GeminiResponse
+        const text = json.candidates?.[0]?.content?.parts?.find((part) => typeof part.text === 'string' && !part.thought)?.text
         return parseVerification(JSON.parse(text ?? ''))
       } catch (error) {
         throw new VerifierUnavailableError(`Gemini: niepoprawna odpowiedź (${String(error)})`)

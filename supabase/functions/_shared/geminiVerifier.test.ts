@@ -41,7 +41,7 @@ test('wysyła zdjęcie z poleceniem i schematem, zwraca wynik', async () => {
   expect(body.generationConfig.responseSchema.required).toContain('ratCount')
 })
 
-test.each([429, 500, 503])('HTTP %i oznacza chwilową niedostępność', async (status) => {
+test.each([408, 429, 500, 503])('HTTP %i oznacza chwilową niedostępność', async (status) => {
   const verifier = createGeminiVerifier({ apiKey: 'k', model: 'm', fetch: vi.fn(async () => new Response('{}', { status })) })
   await expect(verifier.verify(photo)).rejects.toBeInstanceOf(VerifierUnavailableError)
 })
@@ -53,6 +53,11 @@ test('błąd sieci oznacza chwilową niedostępność', async () => {
 
 test('niepoprawny JSON od modelu oznacza chwilową niedostępność', async () => {
   const verifier = createGeminiVerifier({ apiKey: 'k', model: 'm', fetch: vi.fn(async () => geminiResponse('to nie JSON')) })
+  await expect(verifier.verify(photo)).rejects.toBeInstanceOf(VerifierUnavailableError)
+})
+
+test('odpowiedź 200 niebędąca JSON-em oznacza chwilową niedostępność', async () => {
+  const verifier = createGeminiVerifier({ apiKey: 'k', model: 'm', fetch: vi.fn(async () => new Response('<html>', { status: 200 })) })
   await expect(verifier.verify(photo)).rejects.toBeInstanceOf(VerifierUnavailableError)
 })
 
