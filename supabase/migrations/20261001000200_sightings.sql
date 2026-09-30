@@ -140,6 +140,16 @@ declare
   v_selfie boolean := coalesce((p_verification ->> 'isSelfie')::boolean, false);
   v_faces boolean := coalesce((p_verification ->> 'hasThirdPartyFaces')::boolean, false);
 begin
+  -- Fail closed: niekompletna odpowiedź weryfikatora nigdy nie zalicza zgłoszenia.
+  if p_verification is null
+     or p_verification ->> 'ratCount' is null
+     or p_verification ->> 'isSelfie' is null
+     or p_verification ->> 'isScreenOrPrint' is null
+     or p_verification ->> 'isToyOrDrawing' is null
+     or p_verification ->> 'hasThirdPartyFaces' is null then
+    raise exception 'invalid verification' using errcode = '22023';
+  end if;
+
   select * into s from public.sightings where id = p_id for update;
   -- Idempotentnie: rozstrzygamy tylko zgłoszenia, które wciąż czekają.
   if s.id is null or s.status <> 'pending' then
@@ -162,7 +172,8 @@ begin
      where o.user_id = s.user_id
        and o.id <> s.id
        and o.status = 'accepted'
-       and o.created_at > s.created_at - make_interval(mins => public.config_int('cooldown_minutes'))
+       and o.created_at between s.created_at - make_interval(mins => public.config_int('cooldown_minutes'))
+                            and s.created_at + make_interval(mins => public.config_int('cooldown_minutes'))
        and extensions.st_dwithin(o.location, s.location, public.config_int('cooldown_radius_m'))
   ) then
     v_status := 'accepted_no_points';

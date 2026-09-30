@@ -1,9 +1,10 @@
 begin;
-select plan(28);
+select plan(33);
 
 insert into auth.users (id, email)
 values ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
-       ('22222222-2222-2222-2222-222222222222', 'ola@example.com');
+       ('22222222-2222-2222-2222-222222222222', 'ola@example.com'),
+       ('33333333-3333-3333-3333-333333333333', 'ula@example.com');
 
 -- Rynek i plac Grunwaldzki (~1,7 km od siebie), Warszawa.
 create temporary table v (name text primary key, value jsonb);
@@ -187,6 +188,56 @@ select ok(
   and not has_function_privilege('authenticated', 'public.precheck_sighting(uuid,double precision,double precision,real,text)', 'execute')
   and not has_function_privilege('authenticated', 'public.apply_verification(uuid,jsonb,text)', 'execute'),
   'punkty nalicza tylko serwer'
+);
+
+-- 29–33: okno cooldownu z dwóch stron i weryfikacja fail-closed (użytkownik 3)
+-- (a) stare zgłoszenie pending sprzed 2 dni, potem zaliczone w tym samym miejscu teraz
+select public.record_sighting('cccccccc-0000-0000-0000-000000000001', '33333333-3333-3333-3333-333333333333', 17.0320, 51.1100, 10, now(),
+  'sightings-private', '3333/c1.jpg', '1111111111111111', 'gemini', null);
+update public.sightings set created_at = now() - interval '2 days' where id = 'cccccccc-0000-0000-0000-000000000001';
+select public.record_sighting('cccccccc-0000-0000-0000-000000000002', '33333333-3333-3333-3333-333333333333', 17.0320, 51.1100, 10, now(),
+  'sightings-private', '3333/c2.jpg', '2222222222222222', 'fake', (select value from v where name = 'three'));
+select is(
+  public.resolve_pending('cccccccc-0000-0000-0000-000000000001', 'map-photos', 'c1.jpg', 'gemini',
+    (select value from v where name = 'three')) ->> 'status',
+  'accepted',
+  'późniejsze zgłoszenie (2 dni) nie anuluje punktów starego pending'
+);
+
+-- (b) zaliczone zgłoszenie w tym samym miejscu 10 minut wcześniej
+select public.record_sighting('cccccccc-0000-0000-0000-000000000003', '33333333-3333-3333-3333-333333333333', 17.0590, 51.1110, 10, now(),
+  'sightings-private', '3333/c3.jpg', '3333333333333333', 'gemini', null);
+select public.record_sighting('cccccccc-0000-0000-0000-000000000004', '33333333-3333-3333-3333-333333333333', 17.0590, 51.1110, 10, now(),
+  'sightings-private', '3333/c4.jpg', '4444444444444444', 'fake', (select value from v where name = 'three'));
+update public.sightings set created_at = (select created_at from public.sightings where id = 'cccccccc-0000-0000-0000-000000000003') - interval '10 minutes'
+  where id = 'cccccccc-0000-0000-0000-000000000004';
+select is(
+  public.resolve_pending('cccccccc-0000-0000-0000-000000000003', 'map-photos', 'c3.jpg', 'gemini',
+    (select value from v where name = 'three')) ->> 'status',
+  'accepted_no_points',
+  'zaliczone 10 min wcześniej w tym samym miejscu daje brak punktów'
+);
+
+-- fail-closed
+select public.record_sighting('cccccccc-0000-0000-0000-000000000005', '33333333-3333-3333-3333-333333333333', 17.0450, 51.1250, 10, now(),
+  'sightings-private', '3333/c5.jpg', '5555555555555555', 'gemini', null);
+select throws_ok(
+  $$ select public.resolve_pending('cccccccc-0000-0000-0000-000000000005', 'map-photos', 'c5.jpg', 'gemini', '{}'::jsonb) $$,
+  '22023',
+  'invalid verification',
+  'pusta odpowiedź weryfikatora jest błędem'
+);
+select is(
+  (select status from public.sightings where id = 'cccccccc-0000-0000-0000-000000000005'),
+  'pending',
+  'po błędnej odpowiedzi zgłoszenie dalej czeka'
+);
+select throws_ok(
+  $$ select public.record_sighting('cccccccc-0000-0000-0000-000000000006', '33333333-3333-3333-3333-333333333333', 17.0450, 51.1250, 10, now(),
+       'sightings-private', '3333/c6.jpg', '6666666666666666', 'fake', '{"ratCount":1}'::jsonb) $$,
+  '22023',
+  'invalid verification',
+  'niekompletna odpowiedź przy zapisie jest błędem'
 );
 
 set local role authenticated;
