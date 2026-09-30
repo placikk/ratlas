@@ -41,15 +41,6 @@
   line-height: 1;
 }
 
-.tabbar__item--primary .tabbar__icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--rose);
-}
-
 .coming-soon {
   display: flex;
   flex-direction: column;

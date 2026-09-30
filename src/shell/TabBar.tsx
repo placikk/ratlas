@@ -17,7 +17,7 @@ export function TabBar({ active, onSelect }: { active: Tab; onSelect: (tab: Tab)
         <button
           key={tab.id}
           type="button"
-          className={tab.id === 'report' ? 'tabbar__item tabbar__item--primary' : 'tabbar__item'}
+          className="tabbar__item"
           aria-current={tab.id === active ? 'page' : undefined}
           onClick={() => onSelect(tab.id)}
         >
