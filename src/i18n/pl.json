@@ -90,6 +90,8 @@
     "tip": "Wyceluj w szczura i zrób zdjęcie. Nie podchodź za blisko!",
     "shoot": "Zrób zdjęcie",
     "flip": "Przełącz aparat",
+    "zoomTo": "Przybliż {{value}}×",
+    "zoomLevel": "{{value}}×",
     "locating": "Ustalam lokalizację…",
     "sending": "Sprawdzam zdjęcie…",
     "retry": "Spróbuj ponownie",

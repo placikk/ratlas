@@ -10,12 +10,58 @@
   position: relative;
   flex: 1;
   overflow: hidden;
+  /* Szczypanie przybliża aparat, a nie całą stronę. */
+  touch-action: none;
 }
 
 .camera__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform-origin: center;
+  transition: transform 0.08s linear;
+}
+
+.camera__zoom {
+  position: absolute;
+  bottom: 116px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transform: translateX(-50%);
+}
+
+.camera__zoom-level {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.camera__zoom-presets {
+  display: flex;
+  gap: 8px;
+}
+
+.camera__zoom-presets button {
+  min-width: 44px;
+  height: 36px;
+  border: 0;
+  border-radius: 18px;
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.camera__zoom-presets button[aria-pressed='true'] {
+  background: var(--rose);
+  color: var(--on-rose);
 }
 
 .camera__shutter {
