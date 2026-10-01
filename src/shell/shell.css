@@ -134,3 +134,35 @@
   border-radius: 999px;
   background: var(--rose);
 }
+
+.my-sightings {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.my-sightings__item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+}
+
+.my-sightings__photo {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: var(--fur-light);
+  object-fit: cover;
+  font-size: 28px;
+}
+
+.my-sightings__text {
+  gap: 2px;
+}

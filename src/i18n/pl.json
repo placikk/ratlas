@@ -171,5 +171,24 @@
       "not_found": "Ta pinezka już zniknęła z mapy.",
       "error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
     }
+  },
+  "mySightings": {
+    "title": "Moje zgłoszenia",
+    "empty": "Nie masz jeszcze zgłoszeń. Czas na łowy! 🐀",
+    "loadFailed": "Nie udało się pobrać zgłoszeń.",
+    "photoAlt": "Twoje zdjęcie",
+    "status": {
+      "accepted": "Zaliczony",
+      "accepted_no_points": "Na mapie, bez punktów (to miejsce już zaliczone)",
+      "pending": "Sprawdzamy…",
+      "rejected": "Odrzucony"
+    },
+    "reasons": {
+      "no_rat": "nie widać szczura",
+      "screen_or_print": "zdjęcie ekranu lub wydruku",
+      "toy_or_drawing": "zabawka lub rysunek",
+      "verification_failed": "nie udało się sprawdzić"
+    },
+    "gain": "+{{rats}} · +{{raciki}}"
   }
 }
