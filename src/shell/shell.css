@@ -116,3 +116,21 @@
   margin: 8px 0;
   padding-left: 22px;
 }
+
+.profile__rank strong {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.profile__rank-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--fur-light);
+  overflow: hidden;
+}
+
+.profile__rank-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--rose);
+}

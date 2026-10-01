@@ -48,7 +48,13 @@
     "showNickname": "Pokazuj mój pseudonim na mapie",
     "trainingConsent": "Moje zdjęcia mogą pomóc trenować model rozpoznający szczury",
     "saveFailed": "Nie udało się zapisać ustawień.",
-    "logout": "Wyloguj się"
+    "logout": "Wyloguj się",
+    "rank": "Ranga",
+    "toNextRank_one": "Jeszcze {{count}} szczur do rangi „{{rank}}”",
+    "toNextRank_few": "Jeszcze {{count}} szczury do rangi „{{rank}}”",
+    "toNextRank_many": "Jeszcze {{count}} szczurów do rangi „{{rank}}”",
+    "toNextRank_other": "Jeszcze {{count}} szczura do rangi „{{rank}}”",
+    "topRank": "Najwyższa ranga — jesteś legendą!"
   },
   "install": {
     "title": "Zainstaluj Ratlas",
@@ -79,5 +85,53 @@
     "terms": "Regulamin",
     "privacy": "Polityka prywatności",
     "close": "Zamknij"
+  },
+  "report": {
+    "tip": "Wyceluj w szczura i zrób zdjęcie. Nie podchodź za blisko!",
+    "shoot": "Zrób zdjęcie",
+    "flip": "Przełącz aparat",
+    "locating": "Ustalam lokalizację…",
+    "sending": "Sprawdzam zdjęcie…",
+    "retry": "Spróbuj ponownie",
+    "back": "Wróć do aparatu",
+    "problems": {
+      "camera_denied": "Potrzebujemy dostępu do aparatu. Zezwól na niego w ustawieniach przeglądarki i wróć tutaj.",
+      "location_denied": "Potrzebujemy lokalizacji, żeby zaznaczyć szczura na mapie. Zezwól na nią w ustawieniach przeglądarki.",
+      "location_unavailable": "Nie udało się ustalić lokalizacji. Sprawdź, czy lokalizacja w telefonie jest włączona.",
+      "location_inaccurate": "Nie udało się dokładnie ustalić lokalizacji. Wyjdź na otwartą przestrzeń i spróbuj ponownie.",
+      "offline": "Brak połączenia. Spróbuj ponownie, gdy złapiesz zasięg (nie zamykaj tego ekranu — zdjęcie czeka).",
+      "unknown": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+    }
+  },
+  "result": {
+    "again": "Zgłoś kolejnego",
+    "acceptedTitle": "Brawo! 🐀",
+    "gain": "+{{rats}} · +{{raciki}}",
+    "rats_one": "{{count}} szczur",
+    "rats_few": "{{count}} szczury",
+    "rats_many": "{{count}} szczurów",
+    "rats_other": "{{count}} szczura",
+    "raciki_one": "{{count}} racik",
+    "raciki_few": "{{count}} raciki",
+    "raciki_many": "{{count}} racików",
+    "raciki_other": "{{count}} racika",
+    "noPointsTitle": "Ten szczur już zaliczony",
+    "noPoints": "Pinezka trafi na mapę, ale punkty za to miejsce już dostałeś. Poszukaj szczura gdzie indziej!",
+    "pendingTitle": "Sprawdzamy…",
+    "pending": "Nasz szczurzy ekspert jest chwilowo zajęty. Wynik zobaczysz w profilu przy następnym otwarciu aplikacji.",
+    "rejectedTitle": "Nie zaliczone",
+    "rejected": {
+      "no_rat": "Nie widzimy tu szczura. Spróbuj ujęcia, na którym szczur jest wyraźniej widoczny — z bezpiecznej odległości.",
+      "screen_or_print": "To wygląda na zdjęcie ekranu albo wydruku — liczą się tylko prawdziwe szczury.",
+      "toy_or_drawing": "To chyba zabawka albo rysunek 🙂",
+      "verification_failed": "Nie udało się sprawdzić zdjęcia. Zrób nowe zdjęcie."
+    },
+    "blockedTitle": "Tym razem się nie uda",
+    "blocked": {
+      "daily_limit": "Dzienny limit zgłoszeń wykorzystany. Wróć jutro 🐀",
+      "gps_inaccurate": "Lokalizacja jest zbyt niedokładna. Wyjdź na otwartą przestrzeń i spróbuj ponownie.",
+      "outside_city": "Ratlas działa tylko we Wrocławiu.",
+      "duplicate": "To zdjęcie już było."
+    }
   }
 }

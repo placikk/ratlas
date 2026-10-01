@@ -5,12 +5,14 @@ import { InstallGuide } from '../install/InstallGuide'
 import { detectPlatform, readInstallEnv } from '../install/platform'
 import { LegalModal, type LegalDoc } from '../legal/LegalModal'
 import { updateSettings, type Profile, type ProfileSettings } from './profileApi'
+import { rankProgress, useRanks } from './ranksApi'
 
 export function ProfileScreen({ profile, onChange }: { profile: Profile; onChange: () => void }) {
   const { t } = useTranslation()
   const [saveFailed, setSaveFailed] = useState(false)
   const [openDoc, setOpenDoc] = useState<LegalDoc | null>(null)
   const [guideOpen, setGuideOpen] = useState(false)
+  const progress = rankProgress(profile.total_rats, useRanks())
   const installEnv = readInstallEnv()
 
   async function save(patch: Partial<ProfileSettings>) {
@@ -40,6 +42,26 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
           <span className="muted">{t('profile.tokens')}</span>
         </div>
       </div>
+      {progress && (
+        <div className="card stack profile__rank">
+          <span className="muted">{t('profile.rank')}</span>
+          <strong>{progress.current.name}</strong>
+          <div
+            className="profile__rank-bar"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress.fraction * 100)}
+          >
+            <div className="profile__rank-fill" style={{ width: `${Math.round(progress.fraction * 100)}%` }} />
+          </div>
+          <span className="muted">
+            {progress.next
+              ? t('profile.toNextRank', { count: progress.remaining, rank: progress.next.name })
+              : t('profile.topRank')}
+          </span>
+        </div>
+      )}
 
       <h2>{t('profile.settings')}</h2>
       <label className="check">

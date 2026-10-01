@@ -3347,7 +3347,7 @@ Utwórz `eval/README.md`:
    - `toy` — 1, jeśli to zabawka, rysunek, figurka,
    - `selfie` — 1, jeśli widać twarz fotografującego.
 3. Wpisz klucz Gemini do `supabase/functions/.env` (`GEMINI_API_KEY=…`).
-4. Uruchom: `node --env-file=supabase/functions/.env scripts/eval-verifier.ts eval`
+4. Uruchom: `npm run eval`
 
 Dobry zbiór startowy: 20–30 zdjęć, w tym „pułapki” (myszy, wiewiórki, chomiki, pluszaki, zdjęcia ekranu). Cel: precyzja „to jest szczur” ≥ 95%.
 ```
@@ -3425,7 +3425,7 @@ Właściciel tworzy klucz (docs/deploy.md §8 pkt 1) i wpisuje go do `supabase/f
 
 - [ ] **Step 2: Test prawdziwego modelu**
 
-Właściciel wrzuca 5–30 zdjęć do `eval/photos/` i opisuje je w `eval/labels.csv` (eval/README.md). Run: `node --env-file=supabase/functions/.env scripts/eval-verifier.ts eval`
+Właściciel wrzuca 5–30 zdjęć do `eval/photos/` i opisuje je w `eval/labels.csv` (eval/README.md). Run: `npm run eval`
 Expected: odpowiedź dla każdego zdjęcia (bez `BŁĄD HTTP 400/404` — te oznaczają zły format zapytania albo nazwę modelu; wtedy popraw `geminiVerifier.ts` lub `GEMINI_MODEL` według komunikatu). Zapisz wynik precyzji w raporcie. Jeśli precyzja < 95%, porównaj z `GEMINI_MODEL` ustawionym na inny darmowy model Flash i wybierz lepszy.
 
 - [ ] **Step 3: Pełny przepływ lokalnie z Gemini**
