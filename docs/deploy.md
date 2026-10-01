@@ -81,7 +81,7 @@ W Supabase: Authentication → URL Configuration:
 2. Lokalnie (testy i ocena modelu): wpisz go do `supabase/functions/.env` jako `GEMINI_API_KEY=…` i usuń linię `VERIFIER=fake`.
 3. Na produkcji (w swoim terminalu):
    ```bash
-   npx supabase secrets set GEMINI_API_KEY=<klucz> GEMINI_MODEL=gemini-3.5-flash
+   npx supabase secrets set GEMINI_API_KEY=<klucz> GEMINI_MODEL=gemini-3.5-flash-lite   # flash-lite: szybszy i dostępniejszy niż flash (test 2026-10-01)
    npx supabase db push
    npx supabase functions deploy submit-sighting retry-pending
    npm run deploy
