@@ -1,5 +1,5 @@
 begin;
-select plan(16);
+select plan(19);
 
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
@@ -84,6 +84,21 @@ select is(
   (select count(*)::int from public.sightings_in_view(20.9, 52.1, 21.1, 52.3)),
   0,
   'poza Wrocławiem nie ma pinezek'
+);
+
+select is(
+  (select array_agg(id order by id) from public.sightings_in_view(-180, -85, 180, 85)),
+  array['aaaaaaaa-0000-0000-0000-000000000001', 'aaaaaaaa-0000-0000-0000-000000000002']::uuid[],
+  'widok całego świata zawiera pinezki'
+);
+select is(
+  (select array_agg(id order by id) from public.sightings_in_view(-250, -85, 110, 85)),
+  array['aaaaaaaa-0000-0000-0000-000000000001', 'aaaaaaaa-0000-0000-0000-000000000002']::uuid[],
+  'zawinięty widok świata (poza ±180) zawiera pinezki'
+);
+select ok(
+  exists (select 1 from public.sightings_in_view(-10, 50.5, 45, 65) where id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  'widok Europy zawiera pinezkę z Rynku'
 );
 
 -- 9–15: zgłaszanie nadużyć

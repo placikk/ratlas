@@ -1,6 +1,9 @@
 -- Mapa: publiczne pinezki i zgłaszanie nadużyć.
 -- Produkcja ma wyłączone automatyczne udostępnianie — uprawnienia nadajemy jawnie.
 
+-- Filtr po obwiedni liczymy w geometrii planarnej (geografia ma łuki wielkich kół i ucina ±180).
+create index sightings_location_geom_idx on public.sightings using gist ((location::extensions.geometry));
+
 create function public.sightings_in_view(
   p_west double precision,
   p_south double precision,
@@ -36,9 +39,10 @@ as $$
      and s.public_on_map
      and not s.hidden
      and s.created_at > now() - make_interval(days => public.config_int('pin_fade_days'))
+     and s.photo_bucket = 'map-photos'
      and extensions.st_intersects(
-           s.location,
-           extensions.st_makeenvelope(p_west, p_south, p_east, p_north, 4326)::extensions.geography
+           s.location::extensions.geometry,
+           extensions.st_makeenvelope(greatest(p_west, -180), greatest(p_south, -90), least(p_east, 180), least(p_north, 90), 4326)
          )
    order by s.created_at desc
    limit 500
