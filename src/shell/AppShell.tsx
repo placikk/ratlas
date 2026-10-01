@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InstallHint } from '../install/InstallHint'
 import { ProfileScreen } from '../profile/ProfileScreen'
@@ -7,6 +7,9 @@ import { retryPending } from '../report/reportApi'
 import { ReportScreen } from '../report/ReportScreen'
 import { ComingSoon } from './ComingSoon'
 import { TabBar, type Tab } from './TabBar'
+
+// MapLibre jest duży — ładujemy go dopiero, gdy ktoś otworzy mapę.
+const MapScreen = lazy(() => import('../map/MapScreen').then((module) => ({ default: module.MapScreen })))
 
 export function AppShell({ profile, onProfileChange }: { profile: Profile; onProfileChange: () => void }) {
   const { t } = useTranslation()
@@ -31,6 +34,10 @@ export function AppShell({ profile, onProfileChange }: { profile: Profile; onPro
           <ProfileScreen profile={profile} onChange={onProfileChange} />
         ) : tab === 'report' ? (
           <ReportScreen onRecorded={onProfileChange} />
+        ) : tab === 'map' ? (
+          <Suspense fallback={<p className="screen muted">{t('app.loading')}</p>}>
+            <MapScreen />
+          </Suspense>
         ) : (
           <ComingSoon title={t(`tabs.${tab}`)} />
         )}
