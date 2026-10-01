@@ -118,3 +118,28 @@ test('błąd pobierania pokazuje komunikat', async () => {
   await showMap()
   expect(screen.getByRole('alert')).toHaveTextContent('Nie udało się pobrać pinezek')
 })
+
+test('po błędzie zgłoszenia można spróbować ponownie', async () => {
+  mocks.reportPin.mockResolvedValueOnce('error').mockResolvedValueOnce('reported')
+  await showMap()
+  await act(async () => mocks.view.onSelect?.('a'))
+  const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+  await user.click(screen.getByRole('button', { name: 'Zgłoś nadużycie' }))
+  await user.click(screen.getByRole('radio', { name: 'Coś innego' }))
+  await user.click(screen.getByRole('button', { name: 'Wyślij zgłoszenie' }))
+  expect(await screen.findByRole('status')).toHaveTextContent('Nie udało się wysłać zgłoszenia')
+  await user.click(screen.getByRole('button', { name: 'Zgłoś nadużycie' }))
+  expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  await user.click(screen.getByRole('radio', { name: 'Coś innego' }))
+  await user.click(screen.getByRole('button', { name: 'Wyślij zgłoszenie' }))
+  expect(mocks.reportPin).toHaveBeenCalledTimes(2)
+  expect(await screen.findByRole('status')).toHaveTextContent('Dziękujemy! Przyjrzymy się temu.')
+})
+
+test('otwarty panel zostaje po odświeżeniu, które nie zwraca pinezki', async () => {
+  await showMap()
+  await act(async () => mocks.view.onSelect?.('a'))
+  mocks.fetchPins.mockResolvedValue([])
+  await act(async () => vi.advanceTimersByTime(MAP_REFRESH_MS))
+  expect(screen.getByRole('dialog', { name: 'Szczegóły zgłoszenia' })).toBeInTheDocument()
+})

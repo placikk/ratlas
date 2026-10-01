@@ -13,7 +13,7 @@ export function MapScreen() {
   const [fadeDays, setFadeDays] = useState(DEFAULT_FADE_DAYS)
   const [now, setNow] = useState(() => Date.now())
   const [failed, setFailed] = useState(false)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selected, setSelected] = useState<Pin | null>(null)
   const boundsRef = useRef<Bounds | null>(null)
   const requestRef = useRef(0)
 
@@ -50,7 +50,6 @@ export function MapScreen() {
   }, [load])
 
   const collection = useMemo(() => toFeatureCollection(pins, now, fadeDays), [pins, now, fadeDays])
-  const selected = pins.find((pin) => pin.id === selectedId) ?? null
 
   const labels: MapLabels = {
     zoomIn: t('map.zoomIn'),
@@ -62,7 +61,7 @@ export function MapScreen() {
 
   return (
     <section className="map-screen">
-      <MapView collection={collection} labels={labels} onSelect={setSelectedId} onBoundsChange={(bounds) => void load(bounds)} />
+      <MapView collection={collection} labels={labels} onSelect={(id) => setSelected(pins.find((pin) => pin.id === id) ?? null)} onBoundsChange={(bounds) => void load(bounds)} />
       {failed && (
         <p className="map-screen__error" role="alert">
           {t('map.loadFailed')}
@@ -73,7 +72,7 @@ export function MapScreen() {
           key={selected.id}
           pin={selected}
           now={now}
-          onClose={() => setSelectedId(null)}
+          onClose={() => setSelected(null)}
           onHidden={(id) => setPins((current) => current.filter((pin) => pin.id !== id))}
         />
       )}

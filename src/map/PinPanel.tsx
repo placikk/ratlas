@@ -73,8 +73,11 @@ export function PinPanel({
           {pin.isMine ? (
             <span className="muted">{t('map.yours')}</span>
           ) : (
-            !result && (
-              <button className="btn--link" type="button" onClick={() => setReporting(true)}>
+            (!result || result === 'error') && (
+              <button className="btn--link" type="button" onClick={() => {
+                  setResult(null)
+                  setReporting(true)
+                }}>
                 {t('map.report')}
               </button>
             )
