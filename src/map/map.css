@@ -3,7 +3,7 @@
   height: calc(100dvh - var(--tabbar-height) - env(safe-area-inset-bottom));
 }
 
-.map-view {
+.map-screen .map-view {
   position: absolute;
   inset: 0;
 }
