@@ -24,6 +24,9 @@ vi.mock('./profile/ranksApi', async (importOriginal) => ({
   useRanks: () => [],
 }))
 
+vi.mock('./profile/MySightings', () => ({ MySightings: () => null }))
+vi.mock('./map/MapScreen', () => ({ MapScreen: () => <div>Mapa szczurów</div> }))
+
 const signedIn = { status: 'signedIn', session: { user: { id: 'u1' } } }
 
 test('podczas sprawdzania sesji pokazuje ekran ładowania', () => {

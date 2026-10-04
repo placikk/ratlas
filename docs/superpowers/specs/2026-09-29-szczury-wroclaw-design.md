@@ -295,3 +295,11 @@ Reklamy, nagrody fizyczne z wysyłką, własny panel admina, ranking osiedli, po
 - Weryfikacja: Gemini przez REST `generateContent` (domyślnie `gemini-3.5-flash`, zmienny sekretem `GEMINI_MODEL`); lokalnie `VERIFIER=fake`.
 - Ponowienia weryfikacji z rosnącym odstępem: 1 h, 2 h, 4 h, 8 h, 16 h od poprzedniej próby (ok. 31 h łącznie), liczone przy otwarciu aplikacji.
 - Warunki danych Gemini: dla użytkowników z EOG, Szwajcarii i Wielkiej Brytanii darmowy próg Gemini API podlega zasadom płatnym — Google nie używa przesłanych treści do trenowania (ai.google.dev/gemini-api/terms).
+
+## 16. Ustalenia z realizacji planu 3
+
+- Mapa: MapLibre GL 6 + OpenFreeMap (styl Positron przekolorowany w kodzie), ładowana leniwie; pinezki z `sightings_in_view` (tylko zalogowani), odświeżanie po przesunięciu mapy i co 60 s.
+- Skórki pinezek (Biblioteka) i tryb `fuzzy` lokalizacji — odłożone; własne pinezki mają wyróżnioną ikonę.
+- Zgłaszanie nadużyć: powody `not_rat` / `inappropriate` / `other`; po 3 zgłoszeniach pinezka jest ukrywana; przegląd według `docs/admin.md`.
+- Profil ma sekcję „Moje zgłoszenia” (ostatnie 10, z miniaturą, statusem i powodem odrzucenia; prywatne zdjęcia przez podpisane adresy ważne 1 h).
+- Liczba szczurów przy pinezce to ciemna cyfra z białą obwódką (zamiast „szarego dymka”); własne pinezki mają jasny okrąg.

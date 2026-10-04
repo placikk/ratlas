@@ -135,5 +135,62 @@
       "outside_city": "Ratlas działa tylko we Wrocławiu.",
       "duplicate": "To zdjęcie już było."
     }
+  },
+  "map": {
+    "loadFailed": "Nie udało się pobrać pinezek. Spróbujemy ponownie za chwilę.",
+    "zoomIn": "Przybliż",
+    "zoomOut": "Oddal",
+    "locate": "Pokaż mnie",
+    "locationUnavailable": "Lokalizacja niedostępna",
+    "attribution": "Pokaż źródła danych mapy",
+    "panelTitle": "Szczegóły zgłoszenia",
+    "photoAlt": "Zdjęcie szczura",
+    "rats_one": "{{count}} szczur",
+    "rats_few": "{{count}} szczury",
+    "rats_many": "{{count}} szczurów",
+    "rats_other": "{{count}} szczura",
+    "justNow": "przed chwilą",
+    "author": "Wypatrzył(a): {{nickname}}",
+    "authorHidden": "Autor ukrył pseudonim",
+    "yours": "To Twoje zgłoszenie",
+    "close": "Zamknij",
+    "report": "Zgłoś nadużycie",
+    "reportTitle": "Co jest nie tak z tym zgłoszeniem?",
+    "reasons": {
+      "not_rat": "To nie jest szczur",
+      "inappropriate": "Nieodpowiednie zdjęcie",
+      "other": "Coś innego"
+    },
+    "send": "Wyślij zgłoszenie",
+    "cancel": "Anuluj",
+    "reportResult": {
+      "reported": "Dziękujemy! Przyjrzymy się temu.",
+      "already": "To zgłoszenie już od Ciebie mamy.",
+      "own": "To Twoje zgłoszenie.",
+      "hidden": "Dziękujemy! Pinezka została ukryta do sprawdzenia.",
+      "not_found": "Ta pinezka już zniknęła z mapy.",
+      "error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
+    },
+    "mapTitle": "Mapa szczurów we Wrocławiu"
+  },
+  "mySightings": {
+    "title": "Moje zgłoszenia",
+    "empty": "Nie masz jeszcze zgłoszeń. Czas na łowy! 🐀",
+    "loadFailed": "Nie udało się pobrać zgłoszeń.",
+    "photoAlt": "Twoje zdjęcie",
+    "status": {
+      "accepted": "Zaliczony",
+      "accepted_no_points": "Bez punktów (to miejsce już zaliczone)",
+      "pending": "Sprawdzamy…",
+      "rejected": "Odrzucony"
+    },
+    "reasons": {
+      "no_rat": "nie widać szczura",
+      "screen_or_print": "zdjęcie ekranu lub wydruku",
+      "toy_or_drawing": "zabawka lub rysunek",
+      "verification_failed": "nie udało się sprawdzić"
+    },
+    "gain": "+{{rats}} · +{{raciki}}",
+    "hidden": "ukryte po zgłoszeniach"
   }
 }
