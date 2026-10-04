@@ -5,7 +5,7 @@ import { ProfileScreen } from '../profile/ProfileScreen'
 import type { Profile } from '../profile/profileApi'
 import { retryPending } from '../report/reportApi'
 import { ReportScreen } from '../report/ReportScreen'
-import { ComingSoon } from './ComingSoon'
+import { RankingScreen } from '../ranking/RankingScreen'
 import { TabBar, type Tab } from './TabBar'
 
 // MapLibre jest duży — ładujemy go dopiero, gdy ktoś otworzy mapę.
@@ -39,7 +39,7 @@ export function AppShell({ profile, onProfileChange }: { profile: Profile; onPro
             <MapScreen />
           </Suspense>
         ) : (
-          <ComingSoon title={t(`tabs.${tab}`)} />
+          <RankingScreen />
         )}
       </main>
       <TabBar active={tab} onSelect={setTab} />

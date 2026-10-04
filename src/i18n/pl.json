@@ -40,7 +40,6 @@
     "ranking": "Ranking",
     "profile": "Profil"
   },
-  "comingSoon": "Już wkrótce 🐀",
   "profile": {
     "rats": "Szczury",
     "tokens": "Raciki",
@@ -206,5 +205,17 @@
     "secretHint": "Sekretne osiągnięcie — odkryjesz je przypadkiem 😉",
     "reward": "+{{raciki}}",
     "loadFailed": "Nie udało się pobrać osiągnięć."
+  },
+  "ranking": {
+    "title": "Ranking",
+    "month": "Ten miesiąc",
+    "all": "Od początku",
+    "rats_one": "{{count}} szczur",
+    "rats_few": "{{count}} szczury",
+    "rats_many": "{{count}} szczurów",
+    "rats_other": "{{count}} szczura",
+    "me": "(Ty)",
+    "empty": "Nikt jeszcze nie zaliczył szczura w tym okresie. Bądź pierwszą osobą na liście 🐀",
+    "loadFailed": "Nie udało się pobrać rankingu."
   }
 }
