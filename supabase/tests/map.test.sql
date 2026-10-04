@@ -1,5 +1,5 @@
 begin;
-select plan(19);
+select plan(21);
 
 delete from public.reports;
 delete from public.sightings;
@@ -9,7 +9,8 @@ insert into auth.users (id, email) values
   ('22222222-2222-2222-2222-222222222222', 'ola@example.com'),
   ('33333333-3333-3333-3333-333333333333', 'ewa@example.com'),
   ('44444444-4444-4444-4444-444444444444', 'iza@example.com'),
-  ('55555555-5555-5555-5555-555555555555', 'ula@example.com');
+  ('55555555-5555-5555-5555-555555555555', 'ula@example.com'),
+  ('66666666-6666-6666-6666-666666666666', 'zoe@example.com');
 
 update public.profiles set nickname = 'Ala' where id = '11111111-1111-1111-1111-111111111111';
 update public.profiles set nickname = 'Ola', show_nickname_on_map = false where id = '22222222-2222-2222-2222-222222222222';
@@ -37,6 +38,12 @@ begin
     'map-photos', 'a5.jpg', '00ff00ff00ff00ff', 'fake', (select value from v where name = 'one'));
   perform public.record_sighting('aaaaaaaa-0000-0000-0000-000000000006', '22222222-2222-2222-2222-222222222222', 17.0200, 51.1050, 10, now(),
     'sightings-private', '2222/a6.jpg', 'ff00ff00ff00ff00', 'gemini', null);
+  perform public.record_sighting('aaaaaaaa-0000-0000-0000-000000000033', '33333333-3333-3333-3333-333333333333', 17.1000, 51.1050, 10, now(),
+    'sightings-private', '3333/s.jpg', '3333333333333333', 'fake', (select value from v where name = 'selfie'));
+  perform public.record_sighting('aaaaaaaa-0000-0000-0000-000000000044', '44444444-4444-4444-4444-444444444444', 17.1100, 51.1050, 10, now(),
+    'sightings-private', '4444/s.jpg', '4444444444444444', 'fake', (select value from v where name = 'selfie'));
+  perform public.record_sighting('aaaaaaaa-0000-0000-0000-000000000055', '55555555-5555-5555-5555-555555555555', 17.1200, 51.1050, 10, now(),
+    'sightings-private', '5555/s.jpg', '5555555555555555', 'fake', (select value from v where name = 'selfie'));
 end;
 $$;
 update public.sightings set created_at = now() - interval '8 days' where id = 'aaaaaaaa-0000-0000-0000-000000000005';
@@ -128,6 +135,15 @@ select is(
 
 -- 16: niepublicznego zgłoszenia nie da się zgłosić
 select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000003', 'not_rat'), 'not_found', 'niepubliczne zgłoszenie jest niewidoczne');
+
+-- 20–21: kto i ile może zgłaszać
+set local request.jwt.claims = '{"sub":"66666666-6666-6666-6666-666666666666","role":"authenticated"}';
+select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000002', 'not_rat'), 'not_allowed', 'bez zaliczonego szczura nie można zgłaszać');
+reset role;
+update public.app_config set value = '1' where key = 'daily_report_limit';
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"33333333-3333-3333-3333-333333333333","role":"authenticated"}';
+select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000002', 'other'), 'limit', 'dzienny limit zgłoszeń nadużyć');
 
 select * from finish();
 rollback;

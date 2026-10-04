@@ -9,8 +9,8 @@ select is(
 
 select is(
   (select count(*)::int from public.app_config),
-  12,
-  'konfiguracja ma 12 kluczy'
+  14,
+  'konfiguracja ma 14 kluczy'
 );
 
 select is(
