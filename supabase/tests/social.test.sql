@@ -1,5 +1,5 @@
 begin;
-select plan(14);
+select plan(15);
 
 delete from public.reports;
 delete from public.sightings;
@@ -97,7 +97,15 @@ select is(
   'lista zdjęć do usunięcia konta pomija już usunięte'
 );
 
--- 14: uprawnienia
+-- 14: ukryte (oflagowane) zgłoszenie nie liczy się do rankingu
+update public.sightings set hidden = true where id = 'c0000000-0000-0000-0000-000000000003';
+select is(
+  (select rats from public.get_ranking('all') where nickname = 'Ola'),
+  3::bigint,
+  'ukryte zaliczone zgłoszenie (5 szczurów Oli) nie liczy się do rankingu'
+);
+
+-- 15: uprawnienia
 select ok(
   has_function_privilege('authenticated', 'public.get_ranking(text)', 'execute')
   and has_function_privilege('authenticated', 'public.change_nickname(text)', 'execute')

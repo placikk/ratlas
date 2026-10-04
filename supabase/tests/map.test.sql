@@ -1,5 +1,5 @@
 begin;
-select plan(21);
+select plan(23);
 
 delete from public.reports;
 delete from public.sightings;
@@ -144,6 +144,18 @@ update public.app_config set value = '1' where key = 'daily_report_limit';
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"33333333-3333-3333-3333-333333333333","role":"authenticated"}';
 select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000002', 'other'), 'limit', 'dzienny limit zgłoszeń nadużyć');
+
+-- 22: ponowne zgłoszenie tej samej pinezki to 'already', nawet gdy limit wyczerpany
+reset role;
+update public.app_config set value = '5' where key = 'daily_report_limit';
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"44444444-4444-4444-4444-444444444444","role":"authenticated"}';
+select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000002', 'other'), 'reported', 'zgłoszenie przy podniesionym limicie');
+reset role;
+update public.app_config set value = '1' where key = 'daily_report_limit';
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"44444444-4444-4444-4444-444444444444","role":"authenticated"}';
+select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000002', 'other'), 'already', 'ponowne zgłoszenie wygrywa z limitem');
 
 select * from finish();
 rollback;

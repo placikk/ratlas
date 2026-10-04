@@ -21,6 +21,7 @@ as $$
       from public.sightings s
      where s.status = 'accepted'
        and s.rats_awarded > 0
+       and not s.hidden
        and p_period in ('month', 'all')
        and (p_period = 'all'
             or s.created_at >= date_trunc('month', now() at time zone 'Europe/Warsaw') at time zone 'Europe/Warsaw')
@@ -96,6 +97,9 @@ begin
   -- Ochrona przed jednorazowymi kontami: zgłaszać mogą osoby z co najmniej jednym zaliczonym szczurem.
   if not exists (select 1 from public.sightings where user_id = v_user and status = 'accepted') then
     return 'not_allowed';
+  end if;
+  if exists (select 1 from public.reports where sighting_id = p_sighting_id and reporter_id = v_user) then
+    return 'already';
   end if;
   if (select count(*) from public.reports where reporter_id = v_user and created_at >= public.warsaw_day_start())
      >= public.config_int('daily_report_limit') then

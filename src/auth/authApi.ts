@@ -18,6 +18,11 @@ export async function verifyEmailCode(email: string, token: string): Promise<voi
   if (error) throw error
 }
 
+export async function signOutLocal(): Promise<void> {
+  const { error } = await supabase.auth.signOut({ scope: 'local' })
+  if (error) throw error
+}
+
 export async function signOut(): Promise<void> {
   const { error } = await supabase.auth.signOut()
   if (error) throw error

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { signOut } from '../auth/authApi'
+import { signOutLocal } from '../auth/authApi'
 import { deleteAccount } from './accountApi'
 
 export function DeleteAccount() {
@@ -20,7 +20,7 @@ export function DeleteAccount() {
       return
     }
     // Konto już nie istnieje — czyścimy lokalną sesję; aplikacja wraca do ekranu logowania.
-    await signOut().catch(() => undefined)
+    await signOutLocal().catch(() => undefined)
   }
 
   if (!open) {
@@ -47,7 +47,11 @@ export function DeleteAccount() {
       <button className="btn danger" type="button" disabled={!confirmed || busy} onClick={() => void remove()}>
         {t('profile.deleteForever')}
       </button>
-      <button className="btn btn--ghost" type="button" onClick={() => setOpen(false)}>
+      <button className="btn btn--ghost" type="button" onClick={() => {
+          setOpen(false)
+          setConfirmed(false)
+          setFailed(false)
+        }}>
         {t('profile.cancel')}
       </button>
     </section>

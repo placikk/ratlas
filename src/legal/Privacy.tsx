@@ -41,7 +41,7 @@ export function Privacy() {
 
       <h3>5. Jak długo</h3>
       <p>
-        Dane konta przechowujemy do czasu usunięcia konta. Odrzucone zdjęcia usuwamy po 30 dniach.
+        Dane konta przechowujemy do czasu usunięcia konta. Zdjęcia odrzuconych zgłoszeń usuwamy po 30 dniach — przy najbliższym otwarciu aplikacji, a najpóźniej razem z kontem.
       </p>
 
       <h3>6. Twoje prawa</h3>
