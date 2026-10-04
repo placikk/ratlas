@@ -40,7 +40,6 @@
     "ranking": "Ranking",
     "profile": "Profil"
   },
-  "comingSoon": "Już wkrótce 🐀",
   "profile": {
     "rats": "Szczury",
     "tokens": "Raciki",
@@ -54,7 +53,15 @@
     "toNextRank_few": "Jeszcze {{count}} szczury do rangi „{{rank}}”",
     "toNextRank_many": "Jeszcze {{count}} szczurów do rangi „{{rank}}”",
     "toNextRank_other": "Jeszcze {{count}} szczura do rangi „{{rank}}”",
-    "topRank": "Najwyższa ranga — jesteś legendą!"
+    "topRank": "Najwyższa ranga — jesteś legendą!",
+    "changeNickname": "Zmień pseudonim",
+    "saveNickname": "Zapisz",
+    "cancel": "Anuluj",
+    "deleteTitle": "Usuń konto",
+    "deleteExplain": "Usuniemy Twoje konto, wszystkie zgłoszenia, zdjęcia, raciki i osiągnięcia. Tego nie da się cofnąć.",
+    "deleteConfirm": "Rozumiem, że tego nie da się cofnąć",
+    "deleteForever": "Usuń konto na zawsze",
+    "deleteFailed": "Nie udało się usunąć konta. Spróbuj ponownie za chwilę."
   },
   "install": {
     "title": "Zainstaluj Ratlas",
@@ -134,7 +141,9 @@
       "gps_inaccurate": "Lokalizacja jest zbyt niedokładna. Wyjdź na otwartą przestrzeń i spróbuj ponownie.",
       "outside_city": "Ratlas działa tylko we Wrocławiu.",
       "duplicate": "To zdjęcie już było."
-    }
+    },
+    "achievementUnlocked": "🏆 Nowe osiągnięcie: {{name}} (+{{raciki}})",
+    "secretUnlocked": "🤫 Sekretne osiągnięcie odkryte: {{name}}! (+{{raciki}})"
   },
   "map": {
     "loadFailed": "Nie udało się pobrać pinezek. Spróbujemy ponownie za chwilę.",
@@ -169,6 +178,8 @@
       "own": "To Twoje zgłoszenie.",
       "hidden": "Dziękujemy! Pinezka została ukryta do sprawdzenia.",
       "not_found": "Ta pinezka już zniknęła z mapy.",
+      "not_allowed": "Zgłaszać nadużycia mogą osoby, które zaliczyły już co najmniej jednego szczura.",
+      "limit": "Dzienny limit zgłoszeń nadużyć wykorzystany. Wróć jutro.",
       "error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
     },
     "mapTitle": "Mapa szczurów we Wrocławiu"
@@ -192,5 +203,29 @@
     },
     "gain": "+{{rats}} · +{{raciki}}",
     "hidden": "ukryte po zgłoszeniach"
+  },
+  "achievements": {
+    "title": "Osiągnięcia",
+    "progress": "{{unlocked}} z {{total}}",
+    "secretsLeft_one": "Został {{count}} sekret do odkrycia",
+    "secretsLeft_few": "Zostały {{count}} sekrety do odkrycia",
+    "secretsLeft_many": "Zostało {{count}} sekretów do odkrycia",
+    "secretsLeft_other": "Zostało {{count}} sekretu do odkrycia",
+    "secretName": "???",
+    "secretHint": "Sekretne osiągnięcie — odkryjesz je przypadkiem 😉",
+    "reward": "+{{raciki}}",
+    "loadFailed": "Nie udało się pobrać osiągnięć."
+  },
+  "ranking": {
+    "title": "Ranking",
+    "month": "Ten miesiąc",
+    "all": "Od początku",
+    "rats_one": "{{count}} szczur",
+    "rats_few": "{{count}} szczury",
+    "rats_many": "{{count}} szczurów",
+    "rats_other": "{{count}} szczura",
+    "me": "(Ty)",
+    "empty": "Nikt jeszcze nie zaliczył szczura w tym okresie. Bądź pierwszą osobą na liście 🐀",
+    "loadFailed": "Nie udało się pobrać rankingu."
   }
 }

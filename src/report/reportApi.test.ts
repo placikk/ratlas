@@ -10,11 +10,11 @@ test.each([
   [{ status: 'blocked', reason: 'outside_city' }, { kind: 'blocked', reason: 'outside_city' }],
   [
     { status: 'accepted', reject_reason: null, rats_awarded: 3, tokens_awarded: 30 },
-    { kind: 'recorded', status: 'accepted', rejectReason: null, ratsAwarded: 3, tokensAwarded: 30 },
+    { kind: 'recorded', status: 'accepted', rejectReason: null, ratsAwarded: 3, tokensAwarded: 30, achievements: [] },
   ],
   [
     { status: 'rejected', reject_reason: 'no_rat', rats_awarded: 0, tokens_awarded: 0 },
-    { kind: 'recorded', status: 'rejected', rejectReason: 'no_rat', ratsAwarded: 0, tokensAwarded: 0 },
+    { kind: 'recorded', status: 'rejected', rejectReason: 'no_rat', ratsAwarded: 0, tokensAwarded: 0, achievements: [] },
   ],
   [{ status: 'blocked', reason: 'coś' }, { kind: 'error' }],
   [null, { kind: 'error' }],
@@ -29,7 +29,7 @@ test('wysyła zdjęcie z pozycją jako formularz', async () => {
   mocks.invoke.mockResolvedValue({ data: { status: 'pending', reject_reason: null, rats_awarded: 0, tokens_awarded: 0 }, error: null })
   const result = await submitSighting(photo, fix, new Date('2026-10-01T10:00:00Z'))
 
-  expect(result).toEqual({ kind: 'recorded', status: 'pending', rejectReason: null, ratsAwarded: 0, tokensAwarded: 0 })
+  expect(result).toEqual({ kind: 'recorded', status: 'pending', rejectReason: null, ratsAwarded: 0, tokensAwarded: 0, achievements: [] })
   const [name, options] = mocks.invoke.mock.calls[0]
   expect(name).toBe('submit-sighting')
   const form = options.body as FormData
@@ -70,4 +70,23 @@ test('równoległe wywołania retryPending wysyłają jedno zapytanie', async ()
   mocks.invoke.mockResolvedValueOnce({ data: { resolved: 0 }, error: null })
   expect(await retryPending()).toBe(0)
   expect(mocks.invoke).toHaveBeenCalledTimes(2)
+})
+
+test('odczytuje odblokowane osiągnięcia', () => {
+  expect(
+    toSubmitResult({
+      status: 'accepted',
+      reject_reason: null,
+      rats_awarded: 1,
+      tokens_awarded: 10,
+      achievements: [{ code: 'selfie', name: 'Szczurze Selfie', secret: true, reward_tokens: 75 }],
+    }),
+  ).toEqual({
+    kind: 'recorded',
+    status: 'accepted',
+    rejectReason: null,
+    ratsAwarded: 1,
+    tokensAwarded: 10,
+    achievements: [{ code: 'selfie', name: 'Szczurze Selfie', secret: true, rewardTokens: 75 }],
+  })
 })

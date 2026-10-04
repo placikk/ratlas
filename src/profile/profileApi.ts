@@ -46,3 +46,9 @@ export async function updateSettings(userId: string, patch: Partial<ProfileSetti
   const { error } = await supabase.from('profiles').update(patch).eq('id', userId)
   if (error) throw error
 }
+
+export async function changeNickname(nickname: string): Promise<OnboardingResult> {
+  const { error } = await supabase.rpc('change_nickname', { p_nickname: nickname })
+  if (!error) return { ok: true }
+  return { ok: false, reason: onboardingFailureFor(error.code) }
+}

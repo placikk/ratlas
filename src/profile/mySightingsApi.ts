@@ -22,6 +22,7 @@ interface SightingRow {
   created_at: string
   photo_bucket: string
   photo_path: string
+  photo_deleted_at: string | null
 }
 
 const PUBLIC_BUCKET = 'map-photos'
@@ -31,14 +32,16 @@ const SIGNED_URL_SECONDS = 3600
 export async function fetchMySightings(limit = 10): Promise<MySighting[]> {
   const { data, error } = await supabase
     .from('sightings')
-    .select('id, status, reject_reason, hidden, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path')
+    .select('id, status, reject_reason, hidden, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path, photo_deleted_at')
     .order('created_at', { ascending: false })
     .limit(limit)
   if (error) throw error
   const rows = (data ?? []) as SightingRow[]
 
   // Prywatne zdjęcia (selfie, odrzucone, oczekujące) widzi tylko autor — przez podpisany, czasowy adres.
-  const privatePaths = rows.filter((row) => row.photo_bucket !== PUBLIC_BUCKET).map((row) => row.photo_path)
+  const privatePaths = rows
+    .filter((row) => row.photo_deleted_at === null && row.photo_bucket !== PUBLIC_BUCKET)
+    .map((row) => row.photo_path)
   const signedByPath = new Map<string, string>()
   if (privatePaths.length > 0) {
     const signed = await supabase.storage.from(PRIVATE_BUCKET).createSignedUrls(privatePaths, SIGNED_URL_SECONDS)
@@ -55,8 +58,9 @@ export async function fetchMySightings(limit = 10): Promise<MySighting[]> {
     ratsAwarded: row.rats_awarded,
     tokensAwarded: row.tokens_awarded,
     createdAt: row.created_at,
-    photoUrl:
-      row.photo_bucket === PUBLIC_BUCKET
+    photoUrl: row.photo_deleted_at
+      ? null
+      : row.photo_bucket === PUBLIC_BUCKET
         ? supabase.storage.from(PUBLIC_BUCKET).getPublicUrl(row.photo_path).data.publicUrl
         : signedByPath.get(row.photo_path) ?? null,
   }))

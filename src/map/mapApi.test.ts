@@ -38,6 +38,8 @@ test('czas zanikania pochodzi z konfiguracji, a przy błędzie wynosi 7 dni', as
 test.each([
   [{ data: 'hidden', error: null }, 'hidden'],
   [{ data: 'reported', error: null }, 'reported'],
+  [{ data: 'not_allowed', error: null }, 'not_allowed'],
+  [{ data: 'limit', error: null }, 'limit'],
   [{ data: 'dziwne', error: null }, 'error'],
   [{ data: null, error: new Error('x') }, 'error'],
 ])('zgłoszenie nadużycia: %j → %s', async (response, expected) => {

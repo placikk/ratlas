@@ -1,0 +1,40 @@
+.ranking__periods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ranking__row {
+  display: grid;
+  grid-template-columns: 3ch 1fr auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 10px 12px;
+}
+
+.ranking__row--me {
+  outline: 2px solid var(--rose);
+}
+
+.ranking__place {
+  font-weight: 800;
+  color: var(--rose-dark);
+}
+
+.ranking__name {
+  overflow-wrap: anywhere;
+}
+
+.ranking__gap {
+  text-align: center;
+  color: var(--text-muted);
+}

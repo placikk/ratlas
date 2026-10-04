@@ -34,6 +34,8 @@ export function ResultView({ outcome, onAgain }: { outcome: SubmitOutcome; onAga
 
   const isGain = outcome.kind === 'recorded' && outcome.status === 'accepted'
 
+  const unlocked = outcome.kind === 'recorded' ? (outcome.achievements ?? []) : []
+
   return (
     <section className="screen stack result">
       <span className="result__emoji" aria-hidden="true">
@@ -41,6 +43,18 @@ export function ResultView({ outcome, onAgain }: { outcome: SubmitOutcome; onAga
       </span>
       <h1>{title}</h1>
       <p className={isGain ? 'result__gain' : undefined}>{text}</p>
+      {unlocked.length > 0 && (
+        <ul className="result__achievements">
+          {unlocked.map((achievement) => (
+            <li key={achievement.code}>
+              {t(achievement.secret ? 'result.secretUnlocked' : 'result.achievementUnlocked', {
+                name: achievement.name,
+                raciki: t('result.raciki', { count: achievement.rewardTokens }),
+              })}
+            </li>
+          ))}
+        </ul>
+      )}
       <button className="btn" type="button" onClick={onAgain}>
         {t('result.again')}
       </button>

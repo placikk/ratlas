@@ -114,3 +114,23 @@ test('przełączenie aparatu zatrzymuje poprzedni i uruchamia przedni', async ()
   await waitFor(() => expect(mocks.getUserMedia).toHaveBeenLastCalledWith({ video: { facingMode: 'user', width: { ideal: 1920 } }, audio: false }))
   expect(mocks.stop).toHaveBeenCalled()
 })
+
+test('zaliczony szczur pokazuje odblokowane osiągnięcia', async () => {
+  mocks.submitSighting.mockResolvedValue({
+    kind: 'recorded',
+    status: 'accepted',
+    rejectReason: null,
+    ratsAwarded: 1,
+    tokensAwarded: 10,
+    achievements: [
+      { code: 'first_rat', name: 'Pierwszy szczur', secret: false, rewardTokens: 25 },
+      { code: 'selfie', name: 'Szczurze Selfie', secret: true, rewardTokens: 75 },
+    ],
+  })
+  render(<ReportScreen onRecorded={vi.fn()} />)
+
+  await takePhoto()
+
+  expect(await screen.findByText('🏆 Nowe osiągnięcie: Pierwszy szczur (+25 racików)')).toBeInTheDocument()
+  expect(screen.getByText('🤫 Sekretne osiągnięcie odkryte: Szczurze Selfie! (+75 racików)')).toBeInTheDocument()
+})

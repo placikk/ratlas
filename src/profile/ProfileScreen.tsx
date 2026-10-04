@@ -4,7 +4,10 @@ import { signOut } from '../auth/authApi'
 import { InstallGuide } from '../install/InstallGuide'
 import { detectPlatform, readInstallEnv } from '../install/platform'
 import { LegalModal, type LegalDoc } from '../legal/LegalModal'
+import { Achievements } from './Achievements'
+import { DeleteAccount } from './DeleteAccount'
 import { MySightings } from './MySightings'
+import { NicknameEditor } from './NicknameEditor'
 import { updateSettings, type Profile, type ProfileSettings } from './profileApi'
 import { rankProgress, useRanks } from './ranksApi'
 
@@ -32,6 +35,7 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
         <img src="/logo.svg" alt="" width={64} height={64} />
         <h1>{profile.nickname}</h1>
       </header>
+      <NicknameEditor nickname={profile.nickname ?? ''} onChange={onChange} />
 
       <div className="profile__stats">
         <div className="card">
@@ -64,6 +68,7 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
         </div>
       )}
 
+      <Achievements />
       <MySightings />
 
       <h2>{t('profile.settings')}</h2>
@@ -107,6 +112,7 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
       <button className="btn btn--ghost" type="button" onClick={() => void signOut().catch(() => undefined)}>
         {t('profile.logout')}
       </button>
+      <DeleteAccount />
 
       {openDoc && <LegalModal doc={openDoc} onClose={() => setOpenDoc(null)} />}
       {guideOpen && <InstallGuide platform={detectPlatform(installEnv)} onClose={() => setGuideOpen(false)} />}

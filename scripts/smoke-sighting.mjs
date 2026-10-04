@@ -62,8 +62,10 @@ function check(label, actual, predicate) {
 // Ziarno zależne od czasu: kolejne uruchomienia nie trafiają na „duplikat” z poprzednich.
 const seed = Date.now() % 1_000_000
 const first = noiseJpeg(seed + 1)
-check('zaliczony szczur na Rynku', await send(first, 51.11, 17.032),
-  (d) => d.status === 'accepted' && d.rats_awarded === 1 && d.tokens_awarded === 10 && d.public_on_map === true)
+const firstResult = await send(first, 51.11, 17.032)
+check('zaliczony szczur na Rynku (+ osiągnięcie „Pierwszy szczur”)', firstResult,
+  (d) => d.status === 'accepted' && d.rats_awarded === 1 && d.tokens_awarded === 10 && d.public_on_map === true &&
+    Array.isArray(d.achievements) && d.achievements.some((a) => a.code === 'first_rat'))
 check('ten sam szczur 7 m dalej', await send(noiseJpeg(seed + 2), 51.11, 17.0321), (d) => d.status === 'accepted_no_points')
 check('to samo zdjęcie drugi raz', await send(first, 51.12, 17.05), (d) => d.status === 'blocked' && d.reason === 'duplicate')
 check('Warszawa', await send(noiseJpeg(seed + 3), 52.2297, 21.0122), (d) => d.status === 'blocked' && d.reason === 'outside_city')
@@ -71,8 +73,17 @@ check('Warszawa', await send(noiseJpeg(seed + 3), 52.2297, 21.0122), (d) => d.st
 const retry = await client.functions.invoke('retry-pending', { body: {} })
 check('brak zaległych zgłoszeń', retry.data, (d) => d?.resolved === 0)
 
+// Nocny Marek (0–4) może odblokować się o północy — saldo liczymy z faktycznie odblokowanych osiągnięć.
+const expectedBalance = 10 + (firstResult.achievements ?? []).reduce((sum, a) => sum + a.reward_tokens, 0)
 const profile = await client.from('profiles').select('total_rats, tokens_balance').single()
-check('profil po zgłoszeniach', profile.data, (p) => p.total_rats === 1 && p.tokens_balance === 10)
+check('profil po zgłoszeniach (z nagrodą za osiągnięcie)', profile.data, (p) => p.total_rats === 1 && p.tokens_balance === expectedBalance)
 
 const publicPhoto = await admin.storage.from('map-photos').list()
 check('zdjęcie w publicznym buckecie', publicPhoto.data?.length, (n) => n >= 1)
+
+const removal = await client.functions.invoke('delete-account', { body: {} })
+check('usunięcie konta', removal.data, (d) => d?.deleted === true)
+const lookup = await admin.auth.admin.getUserById(created.data.user.id)
+check('konto zniknęło', lookup.data?.user ? 'istnieje' : 'brak', (s) => s === 'brak')
+const leftover = await admin.storage.from('map-photos').list('', { search: `${firstResult.id}.jpg` })
+check('zdjęcie z mapy usunięte', leftover.data?.length ?? -1, (n) => n === 0)

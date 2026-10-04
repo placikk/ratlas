@@ -41,13 +41,13 @@ export function Privacy() {
 
       <h3>5. Jak długo</h3>
       <p>
-        Dane konta przechowujemy do czasu usunięcia konta. Odrzucone zdjęcia usuwamy po 30 dniach.
+        Dane konta przechowujemy do czasu usunięcia konta. Zdjęcia odrzuconych zgłoszeń usuwamy po 30 dniach — przy najbliższym otwarciu aplikacji, a najpóźniej razem z kontem.
       </p>
 
       <h3>6. Twoje prawa</h3>
       <p>
         Masz prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia i sprzeciwu,
-        a także wycofania zgody w dowolnym momencie. Aby usunąć konto, napisz na {LEGAL.contactEmail}. Możesz też złożyć
+        a także wycofania zgody w dowolnym momencie. Konto możesz usunąć w Profilu przyciskiem „Usuń konto” — znikną wtedy wszystkie Twoje dane i zdjęcia (możesz też napisać na {LEGAL.contactEmail}). Możesz też złożyć
         skargę do Prezesa Urzędu Ochrony Danych Osobowych.
       </p>
     </article>

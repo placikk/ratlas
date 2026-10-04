@@ -7,9 +7,11 @@ import { makeProfile } from './test/fixtures'
 const mocks = vi.hoisted(() => ({ useSession: vi.fn(), fetchMyProfile: vi.fn(), updateSettings: vi.fn() }))
 
 vi.mock('./auth/useSession', () => ({ useSession: mocks.useSession }))
+vi.mock('./profile/Achievements', () => ({ Achievements: () => null }))
 vi.mock('./profile/profileApi', () => ({
   fetchMyProfile: mocks.fetchMyProfile,
   completeOnboarding: vi.fn(),
+  changeNickname: vi.fn(),
   updateSettings: mocks.updateSettings,
 }))
 vi.mock('./auth/authApi', () => ({
@@ -24,8 +26,10 @@ vi.mock('./profile/ranksApi', async (importOriginal) => ({
   useRanks: () => [],
 }))
 
+vi.mock('./profile/accountApi', () => ({ deleteAccount: vi.fn() }))
 vi.mock('./profile/MySightings', () => ({ MySightings: () => null }))
 vi.mock('./map/MapScreen', () => ({ MapScreen: () => <div>Mapa szczurów</div> }))
+vi.mock('./ranking/rankingApi', () => ({ fetchRanking: vi.fn(async () => []) }))
 
 const signedIn = { status: 'signedIn', session: { user: { id: 'u1' } } }
 
