@@ -4,6 +4,7 @@ import { signOut } from '../auth/authApi'
 import { InstallGuide } from '../install/InstallGuide'
 import { detectPlatform, readInstallEnv } from '../install/platform'
 import { LegalModal, type LegalDoc } from '../legal/LegalModal'
+import { Achievements } from './Achievements'
 import { MySightings } from './MySightings'
 import { updateSettings, type Profile, type ProfileSettings } from './profileApi'
 import { rankProgress, useRanks } from './ranksApi'
@@ -64,6 +65,7 @@ export function ProfileScreen({ profile, onChange }: { profile: Profile; onChang
         </div>
       )}
 
+      <Achievements />
       <MySightings />
 
       <h2>{t('profile.settings')}</h2>

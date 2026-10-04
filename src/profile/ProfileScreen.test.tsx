@@ -6,6 +6,7 @@ import { makeProfile } from '../test/fixtures'
 import { ProfileScreen } from './ProfileScreen'
 import { updateSettings } from './profileApi'
 
+vi.mock('./Achievements', () => ({ Achievements: () => null }))
 vi.mock('./MySightings', () => ({ MySightings: () => null }))
 vi.mock('./profileApi', () => ({ updateSettings: vi.fn(), fetchMyProfile: vi.fn(), completeOnboarding: vi.fn() }))
 vi.mock('../auth/authApi', () => ({

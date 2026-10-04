@@ -134,7 +134,9 @@
       "gps_inaccurate": "Lokalizacja jest zbyt niedokładna. Wyjdź na otwartą przestrzeń i spróbuj ponownie.",
       "outside_city": "Ratlas działa tylko we Wrocławiu.",
       "duplicate": "To zdjęcie już było."
-    }
+    },
+    "achievementUnlocked": "🏆 Nowe osiągnięcie: {{name}} (+{{raciki}})",
+    "secretUnlocked": "🤫 Sekretne osiągnięcie odkryte: {{name}}! (+{{raciki}})"
   },
   "map": {
     "loadFailed": "Nie udało się pobrać pinezek. Spróbujemy ponownie za chwilę.",
@@ -192,5 +194,17 @@
     },
     "gain": "+{{rats}} · +{{raciki}}",
     "hidden": "ukryte po zgłoszeniach"
+  },
+  "achievements": {
+    "title": "Osiągnięcia",
+    "progress": "{{unlocked}} z {{total}}",
+    "secretsLeft_one": "Został {{count}} sekret do odkrycia",
+    "secretsLeft_few": "Zostały {{count}} sekrety do odkrycia",
+    "secretsLeft_many": "Zostało {{count}} sekretów do odkrycia",
+    "secretsLeft_other": "Zostało {{count}} sekretu do odkrycia",
+    "secretName": "???",
+    "secretHint": "Sekretne osiągnięcie — odkryjesz je przypadkiem 😉",
+    "reward": "+{{raciki}}",
+    "loadFailed": "Nie udało się pobrać osiągnięć."
   }
 }

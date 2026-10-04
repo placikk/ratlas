@@ -5,9 +5,23 @@ import type { Fix } from './location'
 export type BlockReason = 'daily_limit' | 'gps_inaccurate' | 'outside_city' | 'duplicate'
 export type RecordedStatus = 'accepted' | 'accepted_no_points' | 'rejected' | 'pending'
 
+export interface UnlockedAchievement {
+  code: string
+  name: string
+  secret: boolean
+  rewardTokens: number
+}
+
 export type SubmitOutcome =
   | { kind: 'blocked'; reason: BlockReason }
-  | { kind: 'recorded'; status: RecordedStatus; rejectReason: string | null; ratsAwarded: number; tokensAwarded: number }
+  | {
+      kind: 'recorded'
+      status: RecordedStatus
+      rejectReason: string | null
+      ratsAwarded: number
+      tokensAwarded: number
+      achievements?: UnlockedAchievement[]
+    }
 
 export type SubmitResult = SubmitOutcome | { kind: 'offline' } | { kind: 'error' }
 
@@ -28,6 +42,14 @@ export function toSubmitResult(data: unknown): SubmitResult {
       rejectReason: typeof value.reject_reason === 'string' ? value.reject_reason : null,
       ratsAwarded: Number(value.rats_awarded ?? 0),
       tokensAwarded: Number(value.tokens_awarded ?? 0),
+      achievements: Array.isArray(value.achievements)
+        ? (value.achievements as Record<string, unknown>[]).map((item) => ({
+            code: String(item.code),
+            name: String(item.name),
+            secret: item.secret === true,
+            rewardTokens: Number(item.reward_tokens ?? 0),
+          }))
+        : [],
     }
   }
   return { kind: 'error' }

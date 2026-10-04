@@ -7,6 +7,7 @@ import { makeProfile } from './test/fixtures'
 const mocks = vi.hoisted(() => ({ useSession: vi.fn(), fetchMyProfile: vi.fn(), updateSettings: vi.fn() }))
 
 vi.mock('./auth/useSession', () => ({ useSession: mocks.useSession }))
+vi.mock('./profile/Achievements', () => ({ Achievements: () => null }))
 vi.mock('./profile/profileApi', () => ({
   fetchMyProfile: mocks.fetchMyProfile,
   completeOnboarding: vi.fn(),
