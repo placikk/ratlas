@@ -1,5 +1,6 @@
 begin;
 select plan(39);
+delete from public.achievements;
 
 insert into auth.users (id, email)
 values ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
