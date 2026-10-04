@@ -1,6 +1,9 @@
 begin;
 select plan(19);
 
+delete from public.reports;
+delete from public.sightings;
+
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
   ('22222222-2222-2222-2222-222222222222', 'ola@example.com'),

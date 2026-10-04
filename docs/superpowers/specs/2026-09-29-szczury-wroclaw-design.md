@@ -301,4 +301,5 @@ Reklamy, nagrody fizyczne z wysyłką, własny panel admina, ranking osiedli, po
 - Mapa: MapLibre GL 6 + OpenFreeMap (styl Positron przekolorowany w kodzie), ładowana leniwie; pinezki z `sightings_in_view` (tylko zalogowani), odświeżanie po przesunięciu mapy i co 60 s.
 - Skórki pinezek (Biblioteka) i tryb `fuzzy` lokalizacji — odłożone; własne pinezki mają wyróżnioną ikonę.
 - Zgłaszanie nadużyć: powody `not_rat` / `inappropriate` / `other`; po 3 zgłoszeniach pinezka jest ukrywana; przegląd według `docs/admin.md`.
-- Profil ma sekcję „Moje zgłoszenia" (ostatnie 10, z miniaturą, statusem i powodem odrzucenia; prywatne zdjęcia przez podpisane adresy ważne 1 h).
+- Profil ma sekcję „Moje zgłoszenia” (ostatnie 10, z miniaturą, statusem i powodem odrzucenia; prywatne zdjęcia przez podpisane adresy ważne 1 h).
+- Liczba szczurów przy pinezce to ciemna cyfra z białą obwódką (zamiast „szarego dymka”); własne pinezki mają jasny okrąg.
