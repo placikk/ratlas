@@ -4,6 +4,13 @@ select plan(16);
 delete from public.reports;
 delete from public.sightings;
 
+-- Test nie może zależeć od pory dnia: okno „Nocnego Marka” przesuwamy na godzinę (h+2)%24 czasu warszawskiego, a nie bieżącą.
+create temporary table nh as
+  select ((extract(hour from now() at time zone 'Europe/Warsaw')::int + 2) % 24) as hr;
+update public.achievements
+   set rule = jsonb_build_object('type', 'hour_between', 'from', (select hr from nh), 'to', (select hr from nh) + 1)
+ where code = 'night_owl';
+
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111', 'ala@example.com'),
   ('22222222-2222-2222-2222-222222222222', 'ola@example.com');
@@ -83,13 +90,13 @@ begin
 end;
 $$;
 update public.sightings
-   set created_at = (date_trunc('day', now() at time zone 'Europe/Warsaw') - interval '1 day' + interval '2 hours') at time zone 'Europe/Warsaw'
+   set created_at = (date_trunc('day', now() at time zone 'Europe/Warsaw') - interval '1 day' + make_interval(hours => (select hr from nh))) at time zone 'Europe/Warsaw'
  where id = 'a0000000-0000-0000-0000-000000000006';
 select is(
   pg_temp.codes(public.resolve_pending('a0000000-0000-0000-0000-000000000006', 'map-photos', 'a6.jpg', 'gemini',
     (select value from v where name = 'one'))),
   array['rats_10', 'night_owl'],
-  'zgłoszenie z 2:00 to Nocny Marek, a 10. szczur to Dziesiątka'
+  'zgłoszenie z godziny okna to Nocny Marek, a 10. szczur to Dziesiątka'
 );
 select is(
   (select row(total_rats, tokens_balance)::text from public.profiles where id = '11111111-1111-1111-1111-111111111111'),

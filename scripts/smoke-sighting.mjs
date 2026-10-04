@@ -73,8 +73,10 @@ check('Warszawa', await send(noiseJpeg(seed + 3), 52.2297, 21.0122), (d) => d.st
 const retry = await client.functions.invoke('retry-pending', { body: {} })
 check('brak zaległych zgłoszeń', retry.data, (d) => d?.resolved === 0)
 
+// Nocny Marek (0–4) może odblokować się o północy — saldo liczymy z faktycznie odblokowanych osiągnięć.
+const expectedBalance = 10 + (firstResult.achievements ?? []).reduce((sum, a) => sum + a.reward_tokens, 0)
 const profile = await client.from('profiles').select('total_rats, tokens_balance').single()
-check('profil po zgłoszeniach (z nagrodą za osiągnięcie)', profile.data, (p) => p.total_rats === 1 && p.tokens_balance === 35)
+check('profil po zgłoszeniach (z nagrodą za osiągnięcie)', profile.data, (p) => p.total_rats === 1 && p.tokens_balance === expectedBalance)
 
 const publicPhoto = await admin.storage.from('map-photos').list()
 check('zdjęcie w publicznym buckecie', publicPhoto.data?.length, (n) => n >= 1)
