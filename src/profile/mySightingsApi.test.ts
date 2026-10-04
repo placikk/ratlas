@@ -25,6 +25,7 @@ const row = {
   created_at: '2026-10-08T10:00:00Z',
   photo_bucket: 'map-photos',
   photo_path: 's1.jpg',
+  photo_deleted_at: null,
 }
 
 test('pobiera ostatnie zgłoszenia z adresami zdjęć publicznych i prywatnych', async () => {
@@ -37,7 +38,7 @@ test('pobiera ostatnie zgłoszenia z adresami zdjęć publicznych i prywatnych',
 
   const result = await fetchMySightings()
 
-  expect(mocks.select).toHaveBeenCalledWith('id, status, reject_reason, hidden, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path')
+  expect(mocks.select).toHaveBeenCalledWith('id, status, reject_reason, hidden, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path, photo_deleted_at')
   expect(mocks.order).toHaveBeenCalledWith('created_at', { ascending: false })
   expect(mocks.limit).toHaveBeenCalledWith(10)
   expect(mocks.createSignedUrls).toHaveBeenCalledWith(['u1/s2.jpg'], 3600)
@@ -64,4 +65,14 @@ test('błąd podpisywania zostawia zdjęcie bez adresu', async () => {
 test('błąd tabeli jest zgłaszany wyżej', async () => {
   mocks.limit.mockResolvedValue({ data: null, error: new Error('offline') })
   await expect(fetchMySightings()).rejects.toThrow('offline')
+})
+
+test('usunięte zdjęcie odrzuconego zgłoszenia nie ma adresu i nie jest podpisywane', async () => {
+  mocks.limit.mockResolvedValue({
+    data: [{ ...row, status: 'rejected', photo_bucket: 'sightings-private', photo_path: 'u1/s3.jpg', photo_deleted_at: '2026-10-01T00:00:00Z' }],
+    error: null,
+  })
+  const result = await fetchMySightings()
+  expect(mocks.createSignedUrls).not.toHaveBeenCalled()
+  expect(result[0].photoUrl).toBeNull()
 })

@@ -1,5 +1,5 @@
 import { expect, test, vi } from 'vitest'
-import { completeOnboarding, onboardingFailureFor } from './profileApi'
+import { changeNickname, completeOnboarding, onboardingFailureFor } from './profileApi'
 
 const mocks = vi.hoisted(() => ({ rpc: vi.fn() }))
 
@@ -31,4 +31,12 @@ test('zajęty pseudonim jest zgłaszany', async () => {
 test('ponowny onboarding (już zakończony) traktowany jest jako sukces', async () => {
   mocks.rpc.mockResolvedValue({ data: null, error: { code: 'P0001', message: 'already onboarded' } })
   await expect(completeOnboarding('Szczurek', false)).resolves.toEqual({ ok: true })
+})
+
+test('zmiana pseudonimu wywołuje funkcję w bazie i mapuje błędy', async () => {
+  mocks.rpc.mockResolvedValueOnce({ data: null, error: null })
+  await expect(changeNickname('Szczurek')).resolves.toEqual({ ok: true })
+  expect(mocks.rpc).toHaveBeenCalledWith('change_nickname', { p_nickname: 'Szczurek' })
+  mocks.rpc.mockResolvedValueOnce({ data: null, error: { code: '23505', message: 'duplicate' } })
+  await expect(changeNickname('Ola')).resolves.toEqual({ ok: false, reason: 'nickname_taken' })
 })

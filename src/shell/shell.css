@@ -49,15 +49,6 @@
   line-height: 1;
 }
 
-.coming-soon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
-}
-
 .profile__header {
   display: flex;
   align-items: center;

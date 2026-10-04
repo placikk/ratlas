@@ -47,7 +47,7 @@ export function Privacy() {
       <h3>6. Twoje prawa</h3>
       <p>
         Masz prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia i sprzeciwu,
-        a także wycofania zgody w dowolnym momencie. Aby usunąć konto, napisz na {LEGAL.contactEmail}. Możesz też złożyć
+        a także wycofania zgody w dowolnym momencie. Konto możesz usunąć w Profilu przyciskiem „Usuń konto” — znikną wtedy wszystkie Twoje dane i zdjęcia (możesz też napisać na {LEGAL.contactEmail}). Możesz też złożyć
         skargę do Prezesa Urzędu Ochrony Danych Osobowych.
       </p>
     </article>

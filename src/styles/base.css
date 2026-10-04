@@ -177,3 +177,8 @@ input {
 .modal__body li {
   margin: 4px 0;
 }
+
+.btn.danger {
+  background: var(--danger);
+  color: #fff;
+}

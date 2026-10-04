@@ -3,9 +3,9 @@ import { DEFAULT_FADE_DAYS, type Bounds, type Pin } from './pins'
 
 export type ReportReason = 'not_rat' | 'inappropriate' | 'other'
 export const REPORT_REASONS: ReportReason[] = ['not_rat', 'inappropriate', 'other']
-export type ReportResult = 'reported' | 'already' | 'own' | 'hidden' | 'not_found' | 'error'
+export type ReportResult = 'reported' | 'already' | 'own' | 'hidden' | 'not_found' | 'not_allowed' | 'limit' | 'error'
 
-const REPORT_RESULTS: readonly string[] = ['reported', 'already', 'own', 'hidden', 'not_found']
+const REPORT_RESULTS: readonly string[] = ['reported', 'already', 'own', 'hidden', 'not_found', 'not_allowed', 'limit']
 
 interface PinRow {
   id: string

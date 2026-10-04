@@ -2,5 +2,5 @@
 export const LEGAL = {
   adminName: 'Twórca aplikacji Ratlas',
   contactEmail: 'kontakt@example.com',
-  version: '2026-09-30',
+  version: '2026-10-04',
 }

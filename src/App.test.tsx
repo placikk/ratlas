@@ -11,6 +11,7 @@ vi.mock('./profile/Achievements', () => ({ Achievements: () => null }))
 vi.mock('./profile/profileApi', () => ({
   fetchMyProfile: mocks.fetchMyProfile,
   completeOnboarding: vi.fn(),
+  changeNickname: vi.fn(),
   updateSettings: mocks.updateSettings,
 }))
 vi.mock('./auth/authApi', () => ({
@@ -25,6 +26,7 @@ vi.mock('./profile/ranksApi', async (importOriginal) => ({
   useRanks: () => [],
 }))
 
+vi.mock('./profile/accountApi', () => ({ deleteAccount: vi.fn() }))
 vi.mock('./profile/MySightings', () => ({ MySightings: () => null }))
 vi.mock('./map/MapScreen', () => ({ MapScreen: () => <div>Mapa szczurów</div> }))
 vi.mock('./ranking/rankingApi', () => ({ fetchRanking: vi.fn(async () => []) }))
