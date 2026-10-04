@@ -14,4 +14,5 @@ cp .env.example .env.local        # i wpisz klucz z: npx supabase status
 npm run dev                       # http://localhost:5173 (e-maile z kodami: http://127.0.0.1:54324)
 npm test                          # testy frontendu
 npm run test:db                   # testy bazy (pgTAP)
+npm run e2e                       # testy w przeglądarce (wymagają db:start i functions:serve)
 ```
