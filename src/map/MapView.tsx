@@ -11,7 +11,7 @@ import {
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { useEffect, useRef } from 'react'
 import { BASE_STYLE_URL, ratifyStyle } from './mapStyle'
-import type { Bounds, PinCollection } from './pins'
+import { normalizeBounds, type Bounds, type PinCollection } from './pins'
 import { RAT_ICON_SVG, RAT_MINE_ICON_SVG, svgToImage } from './ratIcons'
 
 // MapLibre 6 to ESM z osobnym workerem — Vite pakuje go razem z zależnościami.
@@ -23,9 +23,13 @@ export interface MapLabels {
   locate: string
   locationUnavailable: string
   attribution: string
+  mapTitle: string
 }
 
-export const WROCLAW_CENTER: [number, number] = [17.032, 51.11]
+const WROCLAW_CENTER: [number, number] = [17.032, 51.11]
+
+// Mapa odmontowuje się przy zmianie karty — pamiętamy ostatni widok.
+let lastCamera: { center: [number, number]; zoom: number } | null = null
 
 const SOURCE_ID = 'pins'
 
@@ -42,7 +46,7 @@ async function loadStyle(): Promise<StyleSpecification | string> {
 
 function boundsOf(map: MapLibreMap): Bounds {
   const bounds = map.getBounds()
-  return { west: bounds.getWest(), south: bounds.getSouth(), east: bounds.getEast(), north: bounds.getNorth() }
+  return normalizeBounds({ west: bounds.getWest(), south: bounds.getSouth(), east: bounds.getEast(), north: bounds.getNorth() })
 }
 
 export function MapView({
@@ -79,8 +83,8 @@ export function MapView({
       const map = new MapLibreMap({
         container: containerRef.current,
         style,
-        center: WROCLAW_CENTER,
-        zoom: 13,
+        center: lastCamera?.center ?? WROCLAW_CENTER,
+        zoom: lastCamera?.zoom ?? 13,
         attributionControl: { compact: true },
         locale: {
           'NavigationControl.ZoomIn': l.zoomIn,
@@ -88,6 +92,7 @@ export function MapView({
           'GeolocateControl.FindMyLocation': l.locate,
           'GeolocateControl.LocationNotAvailable': l.locationUnavailable,
           'AttributionControl.ToggleAttribution': l.attribution,
+          'Map.Title': l.mapTitle,
         },
       })
       created = map
@@ -96,8 +101,16 @@ export function MapView({
       map.addControl(new GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: false }))
 
       map.on('load', async () => {
-        map.addImage('rat', await svgToImage(RAT_ICON_SVG, 96), { pixelRatio: 2 })
-        map.addImage('rat-mine', await svgToImage(RAT_MINE_ICON_SVG, 96), { pixelRatio: 2 })
+        try {
+          const rat = await svgToImage(RAT_ICON_SVG, 96)
+          const ratMine = await svgToImage(RAT_MINE_ICON_SVG, 96)
+          if (cancelled) return
+          map.addImage('rat', rat, { pixelRatio: 2 })
+          map.addImage('rat-mine', ratMine, { pixelRatio: 2 })
+        } catch (error) {
+          if (cancelled) return
+          console.error('Nie udało się wczytać ikon pinezek', error)
+        }
         map.addSource(SOURCE_ID, {
           type: 'geojson',
           data: collectionRef.current as unknown as Parameters<GeoJSONSource['setData']>[0],
@@ -167,7 +180,10 @@ export function MapView({
         }
 
         readyRef.current = true
-        map.on('moveend', () => callbacksRef.current.onBoundsChange(boundsOf(map)))
+        map.on('moveend', () => {
+          lastCamera = { center: map.getCenter().toArray() as [number, number], zoom: map.getZoom() }
+          callbacksRef.current.onBoundsChange(boundsOf(map))
+        })
         callbacksRef.current.onBoundsChange(boundsOf(map))
       })
     })

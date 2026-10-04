@@ -143,3 +143,14 @@ test('otwarty panel zostaje po odświeżeniu, które nie zwraca pinezki', async 
   await act(async () => vi.advanceTimersByTime(MAP_REFRESH_MS))
   expect(screen.getByRole('dialog', { name: 'Szczegóły zgłoszenia' })).toBeInTheDocument()
 })
+
+test('przy ukrytej karcie nie odświeża pinezek', async () => {
+  await showMap()
+  Object.defineProperty(document, 'hidden', { value: true, configurable: true })
+  try {
+    await act(async () => vi.advanceTimersByTime(MAP_REFRESH_MS))
+    expect(mocks.fetchPins).toHaveBeenCalledTimes(1)
+  } finally {
+    Reflect.deleteProperty(document, 'hidden')
+  }
+})

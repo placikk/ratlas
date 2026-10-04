@@ -170,7 +170,8 @@
       "hidden": "Dziękujemy! Pinezka została ukryta do sprawdzenia.",
       "not_found": "Ta pinezka już zniknęła z mapy.",
       "error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
-    }
+    },
+    "mapTitle": "Mapa szczurów we Wrocławiu"
   },
   "mySightings": {
     "title": "Moje zgłoszenia",
@@ -179,7 +180,7 @@
     "photoAlt": "Twoje zdjęcie",
     "status": {
       "accepted": "Zaliczony",
-      "accepted_no_points": "Na mapie, bez punktów (to miejsce już zaliczone)",
+      "accepted_no_points": "Bez punktów (to miejsce już zaliczone)",
       "pending": "Sprawdzamy…",
       "rejected": "Odrzucony"
     },
@@ -189,6 +190,7 @@
       "toy_or_drawing": "zabawka lub rysunek",
       "verification_failed": "nie udało się sprawdzić"
     },
-    "gain": "+{{rats}} · +{{raciki}}"
+    "gain": "+{{rats}} · +{{raciki}}",
+    "hidden": "ukryte po zgłoszeniach"
   }
 }

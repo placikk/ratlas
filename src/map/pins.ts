@@ -58,6 +58,17 @@ export function toFeatureCollection(pins: Pin[], now: number, fadeDays: number):
   }
 }
 
+// MapLibre zwraca „rozwinięte” długości geograficzne (np. 376.9) przy przesuwaniu w kopię świata.
+export function normalizeBounds(bounds: Bounds): Bounds {
+  const { south, north } = bounds
+  if (bounds.east - bounds.west >= 360) return { west: -180, east: 180, south, north }
+  const shift = Math.floor((bounds.west + 180) / 360) * 360
+  const west = bounds.west - shift
+  const east = bounds.east - shift
+  if (east > 180) return { west: -180, east: 180, south, north }
+  return { west, east, south, north }
+}
+
 const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ['day', DAY_MS],
   ['hour', 3_600_000],
@@ -65,7 +76,7 @@ const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
 ]
 
 export function timeAgo(createdAt: string, now: number, justNow: string): string {
-  const diff = Date.parse(createdAt) - now
+  const diff = Math.min(0, Date.parse(createdAt) - now)
   const format = new Intl.RelativeTimeFormat('pl', { numeric: 'auto' })
   for (const [unit, size] of UNITS) {
     if (Math.abs(diff) >= size) return format.format(Math.round(diff / size), unit)

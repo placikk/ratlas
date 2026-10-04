@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { pinOpacity, timeAgo, toFeatureCollection, type Pin } from './pins'
+import { normalizeBounds, pinOpacity, timeAgo, toFeatureCollection, type Pin } from './pins'
 
 const NOW = Date.parse('2026-10-08T12:00:00Z')
 const DAY = 86_400_000
@@ -38,4 +38,23 @@ test.each([
   [3 * DAY, '3 dni temu'],
 ])('timeAgo dla %i ms', (ago, expected) => {
   expect(timeAgo(new Date(NOW - ago).toISOString(), NOW, 'przed chwilą')).toBe(expected)
+})
+
+test('timeAgo przy zegarze telefonu spóźnionym względem serwera pokazuje „przed chwilą”', () => {
+  const createdAt = new Date(NOW + 2 * 60_000).toISOString()
+  expect(timeAgo(createdAt, NOW, 'przed chwilą')).toBe('przed chwilą')
+})
+
+test.each([
+  [16.9, 17.2, 16.9, 17.2],
+  [376.9, 377.2, 16.9, 17.2],
+  [-343.1, -342.8, 16.9, 17.2],
+  [-200, 300, -180, 180],
+  [170, 190, -180, 180],
+])('normalizeBounds(%f..%f) daje %f..%f', (west, east, expectedWest, expectedEast) => {
+  const result = normalizeBounds({ west, east, south: 51.0, north: 51.2 })
+  expect(result.west).toBeCloseTo(expectedWest, 5)
+  expect(result.east).toBeCloseTo(expectedEast, 5)
+  expect(result.south).toBe(51.0)
+  expect(result.north).toBe(51.2)
 })

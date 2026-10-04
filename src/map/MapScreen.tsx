@@ -44,6 +44,7 @@ export function MapScreen() {
 
   useEffect(() => {
     const timer = setInterval(() => {
+      if (document.hidden) return
       if (boundsRef.current) void load(boundsRef.current)
     }, MAP_REFRESH_MS)
     return () => clearInterval(timer)
@@ -57,6 +58,7 @@ export function MapScreen() {
     locate: t('map.locate'),
     locationUnavailable: t('map.locationUnavailable'),
     attribution: t('map.attribution'),
+    mapTitle: t('map.mapTitle'),
   }
 
   return (

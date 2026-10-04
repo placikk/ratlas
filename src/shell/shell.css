@@ -6,6 +6,14 @@
   margin: calc(12px + env(safe-area-inset-top)) 16px 0;
 }
 
+.shell:has(.map-screen) .install-hint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
+
 .tabbar {
   position: fixed;
   inset: auto 0 0;
