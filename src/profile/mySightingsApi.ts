@@ -5,6 +5,7 @@ export interface MySighting {
   id: string
   status: RecordedStatus
   rejectReason: string | null
+  hidden: boolean
   ratsAwarded: number
   tokensAwarded: number
   createdAt: string
@@ -15,6 +16,7 @@ interface SightingRow {
   id: string
   status: RecordedStatus
   reject_reason: string | null
+  hidden: boolean
   rats_awarded: number
   tokens_awarded: number
   created_at: string
@@ -29,7 +31,7 @@ const SIGNED_URL_SECONDS = 3600
 export async function fetchMySightings(limit = 10): Promise<MySighting[]> {
   const { data, error } = await supabase
     .from('sightings')
-    .select('id, status, reject_reason, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path')
+    .select('id, status, reject_reason, hidden, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path')
     .order('created_at', { ascending: false })
     .limit(limit)
   if (error) throw error
@@ -49,6 +51,7 @@ export async function fetchMySightings(limit = 10): Promise<MySighting[]> {
     id: row.id,
     status: row.status,
     rejectReason: row.reject_reason,
+    hidden: row.hidden,
     ratsAwarded: row.rats_awarded,
     tokensAwarded: row.tokens_awarded,
     createdAt: row.created_at,

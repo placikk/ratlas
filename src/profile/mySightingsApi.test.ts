@@ -1,11 +1,11 @@
 import { expect, test, vi } from 'vitest'
 import { fetchMySightings } from './mySightingsApi'
 
-const mocks = vi.hoisted(() => ({ limit: vi.fn(), createSignedUrls: vi.fn(), getPublicUrl: vi.fn(), order: vi.fn() }))
+const mocks = vi.hoisted(() => ({ select: vi.fn(), limit: vi.fn(), createSignedUrls: vi.fn(), getPublicUrl: vi.fn(), order: vi.fn() }))
 
 vi.mock('../lib/supabase', () => ({
   supabase: {
-    from: () => ({ select: () => ({ order: (...args: unknown[]) => { mocks.order(...args); return { limit: mocks.limit } } }) }),
+    from: () => ({ select: (...cols: unknown[]) => { mocks.select(...cols); return { order: (...args: unknown[]) => { mocks.order(...args); return { limit: mocks.limit } } } } }),
     storage: {
       from: (bucket: string) =>
         bucket === 'map-photos'
@@ -19,6 +19,7 @@ const row = {
   id: 's1',
   status: 'accepted',
   reject_reason: null,
+  hidden: false,
   rats_awarded: 2,
   tokens_awarded: 20,
   created_at: '2026-10-08T10:00:00Z',
@@ -36,12 +37,13 @@ test('pobiera ostatnie zgłoszenia z adresami zdjęć publicznych i prywatnych',
 
   const result = await fetchMySightings()
 
+  expect(mocks.select).toHaveBeenCalledWith('id, status, reject_reason, hidden, rats_awarded, tokens_awarded, created_at, photo_bucket, photo_path')
   expect(mocks.order).toHaveBeenCalledWith('created_at', { ascending: false })
   expect(mocks.limit).toHaveBeenCalledWith(10)
   expect(mocks.createSignedUrls).toHaveBeenCalledWith(['u1/s2.jpg'], 3600)
   expect(result).toEqual([
-    { id: 's1', status: 'accepted', rejectReason: null, ratsAwarded: 2, tokensAwarded: 20, createdAt: '2026-10-08T10:00:00Z', photoUrl: 'https://x/public/s1.jpg' },
-    { id: 's2', status: 'rejected', rejectReason: 'no_rat', ratsAwarded: 0, tokensAwarded: 0, createdAt: '2026-10-08T10:00:00Z', photoUrl: 'https://x/signed/s2' },
+    { id: 's1', status: 'accepted', rejectReason: null, hidden: false, ratsAwarded: 2, tokensAwarded: 20, createdAt: '2026-10-08T10:00:00Z', photoUrl: 'https://x/public/s1.jpg' },
+    { id: 's2', status: 'rejected', rejectReason: 'no_rat', hidden: false, ratsAwarded: 0, tokensAwarded: 0, createdAt: '2026-10-08T10:00:00Z', photoUrl: 'https://x/signed/s2' },
   ])
 })
 

@@ -27,9 +27,8 @@ export function MySightings() {
 
   function statusText(item: MySighting): string {
     const status = t(`mySightings.status.${item.status}`)
-    return item.status === 'rejected' && item.rejectReason
-      ? `${status}: ${t(`mySightings.reasons.${item.rejectReason}`)}`
-      : status
+    if (item.status === 'rejected' && item.rejectReason) return `${status}: ${t(`mySightings.reasons.${item.rejectReason}`)}`
+    return item.hidden ? `${status} · ${t('mySightings.hidden')}` : status
   }
 
   return (
