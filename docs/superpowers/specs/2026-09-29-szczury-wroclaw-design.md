@@ -303,3 +303,15 @@ Reklamy, nagrody fizyczne z wysyłką, własny panel admina, ranking osiedli, po
 - Zgłaszanie nadużyć: powody `not_rat` / `inappropriate` / `other`; po 3 zgłoszeniach pinezka jest ukrywana; przegląd według `docs/admin.md`.
 - Profil ma sekcję „Moje zgłoszenia” (ostatnie 10, z miniaturą, statusem i powodem odrzucenia; prywatne zdjęcia przez podpisane adresy ważne 1 h).
 - Liczba szczurów przy pinezce to ciemna cyfra z białą obwódką (zamiast „szarego dymka”); własne pinezki mają jasny okrąg.
+
+## 17. Ustalenia z realizacji planu 4 i projekt planu 5 (Szczurza Biblioteka)
+
+**Plan 4 (zrealizowany):** ranking liczony na bieżąco funkcją `get_ranking` (bez widoków zmaterializowanych); ranking pomija pinezki ukryte po zgłoszeniach nadużyć; „Odrzański Wilk” tylko po tagu `woda`; zgłaszać nadużycia mogą osoby z ≥1 zaliczonym szczurem, maks. 10 na dobę; odrzucone zdjęcia usuwa `retry-pending` po 30 dniach przy otwarciu aplikacji (najpóźniej razem z kontem); publiczne strony `/prywatnosc` i `/regulamin`; ikony maskable/apple z różowym tłem.
+
+**Plan 5 — Szczurza Biblioteka:**
+- Nowa zakładka **📚 Biblioteka** (między Rankingiem a Profilem): saldo racików, sekcje Karty wiedzy, Quizy, Wygląd; przedmiot ma cenę albo „Masz”.
+- `reward_items` (`id` tekstowy, `type` `knowledge_card` | `quiz` | `pin_skin` | `title`, `name`, `teaser`, `price`, `content` jsonb, `sort_order`, `active`) i `user_rewards` (`user_id`, `item_id`, `acquired_at`, `data` jsonb). Katalog bez `content` dla nieposiadanych; treść tylko po zakupie (`get_item_content`).
+- `purchase_item(item_id)`: atomowo — blokada profilu, sprawdzenie salda, wpis `token_ledger` (`purchase`, ujemny), `user_rewards`; podwójny zakup i ujemne saldo zablokowane.
+- Ceny: karta 30, quiz 50, tytuł 100–150, skórka pinezki 200–300.
+- Treść startowa: 10 kart wiedzy (własny tekst po polsku ze źródłami; do przeczytania przez właściciela przed publicznym startem), 3 quizy × 5 pytań. Quiz można powtarzać, zapisujemy najlepszy wynik; quizy nie dają racików.
+- Kosmetyka: skórki pinezek (widoczne dla wszystkich na mapie przy pinezkach właściciela) i tytuły przy pseudonimie (ranking, panel pinezki). Naraz założona jedna skórka i jeden tytuł (`profiles.active_pin_skin`, `profiles.active_title`, zmieniane funkcją `equip_item`). Ramki avatara pominięte (brak avatarów). Kody partnerów — etap 3.
