@@ -46,3 +46,17 @@ commit;
 ## Werdykt modelu dla zgłoszenia
 
 **Table Editor → `sightings`** → kolumny `status`, `reject_reason`, `verifier`, `verifier_raw` (pełna odpowiedź Gemini). Zdjęcia prywatne (selfie, odrzucone, oczekujące): **Storage → `sightings-private`** → folder z id użytkownika.
+
+## Szczurza Biblioteka
+
+Przedmioty są w tabeli `reward_items` (SQL Editor w panelu Supabase). Treść karty: `{"body": ["akapit", …], "sources": [{"label": "…", "url": "https://…"}]}`; quizu: `{"questions": [{"question": "…", "answers": ["…", "…", "…"], "correct": 0, "explain": "…"}]}` (`correct` liczone od 0); skórki: `{"skin": "gold" | "night" | "sewer"}` (nowe kolory wymagają zmiany `PIN_SKINS` w `src/map/ratIcons.ts`); tytułu: `{"label": "…"}`.
+
+Dodanie karty:
+
+```sql
+insert into public.reward_items (id, type, name, teaser, price, sort_order, content)
+values ('card_nowa', 'knowledge_card', 'Tytuł karty', 'Zajawka', 30, 14,
+        $j${"body": ["Akapit 1.", "Akapit 2."], "sources": [{"label": "Źródło", "url": "https://…"}]}$j$::jsonb);
+```
+
+Wycofanie przedmiotu ze sprzedaży (kupione zostają u osób, które je mają): `update public.reward_items set active = false where id = '…';`

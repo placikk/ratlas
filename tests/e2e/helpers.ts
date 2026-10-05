@@ -1,4 +1,6 @@
+import { execSync } from 'node:child_process'
 import { expect, type Page } from '@playwright/test'
+import { createClient } from '@supabase/supabase-js'
 
 const MAILPIT = 'http://127.0.0.1:54324'
 
@@ -52,4 +54,24 @@ export async function completeOnboarding(page: Page, nickname: string): Promise<
 export async function dismissInstallHint(page: Page): Promise<void> {
   const notNow = page.getByRole('button', { name: 'Nie teraz' })
   if (await notNow.isVisible()) await notNow.click()
+}
+
+function localSecretKey(): string {
+  const status = execSync('npx supabase status -o env', { stdio: ['ignore', 'pipe', 'ignore'] }).toString()
+  const line = status.split('\n').find((entry) => entry.startsWith('SECRET_KEY='))
+  if (!line) throw new Error('Brak SECRET_KEY — czy działa npm run db:start?')
+  return line.slice('SECRET_KEY='.length).replace(/^"|"$/g, '')
+}
+
+// Testowe raciki: korekta w dzienniku i saldo profilu (tylko lokalna baza).
+export async function grantRaciki(email: string, amount: number): Promise<void> {
+  const admin = createClient('http://127.0.0.1:54321', localSecretKey())
+  const { data, error } = await admin.auth.admin.listUsers({ perPage: 1000 })
+  if (error) throw error
+  const user = data.users.find((candidate) => candidate.email === email)
+  if (!user) throw new Error(`Brak konta ${email}`)
+  const ledger = await admin.from('token_ledger').insert({ user_id: user.id, delta: amount, reason: 'correction' })
+  if (ledger.error) throw ledger.error
+  const profile = await admin.from('profiles').update({ tokens_balance: amount }).eq('id', user.id)
+  if (profile.error) throw profile.error
 }
