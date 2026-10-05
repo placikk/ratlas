@@ -15,3 +15,10 @@ test('zgłasza wybór zakładki', async () => {
   await userEvent.click(screen.getByRole('button', { name: 'Profil' }))
   expect(onSelect).toHaveBeenCalledWith('profile')
 })
+
+test('ma zakładkę Biblioteka', async () => {
+  const onSelect = vi.fn()
+  render(<TabBar active="map" onSelect={onSelect} />)
+  await userEvent.click(screen.getByRole('button', { name: 'Biblioteka' }))
+  expect(onSelect).toHaveBeenCalledWith('library')
+})

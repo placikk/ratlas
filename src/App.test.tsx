@@ -30,6 +30,7 @@ vi.mock('./profile/accountApi', () => ({ deleteAccount: vi.fn() }))
 vi.mock('./profile/MySightings', () => ({ MySightings: () => null }))
 vi.mock('./map/MapScreen', () => ({ MapScreen: () => <div>Mapa szczurów</div> }))
 vi.mock('./ranking/rankingApi', () => ({ fetchRanking: vi.fn(async () => []) }))
+vi.mock('./library/libraryApi', () => ({ fetchCatalog: vi.fn(async () => []), purchaseItem: vi.fn() }))
 
 const signedIn = { status: 'signedIn', session: { user: { id: 'u1' } } }
 
