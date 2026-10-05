@@ -13,13 +13,13 @@ vi.mock('../lib/supabase', () => ({
 
 test('pobiera pinezki z widocznego fragmentu i zamienia nazwy pól', async () => {
   mocks.rpc.mockResolvedValue({
-    data: [{ id: 'a', lon: 17.03, lat: 51.11, rats: 2, created_at: '2026-10-08T10:00:00Z', photo_path: 'a.jpg', nickname: 'Ala', is_mine: false }],
+    data: [{ id: 'a', lon: 17.03, lat: 51.11, rats: 2, created_at: '2026-10-08T10:00:00Z', photo_path: 'a.jpg', nickname: 'Ala', is_mine: false, skin: 'gold', title: 'Tester' }],
     error: null,
   })
   const pins = await fetchPins({ west: 16.9, south: 51.0, east: 17.2, north: 51.2 })
   expect(mocks.rpc).toHaveBeenCalledWith('sightings_in_view', { p_west: 16.9, p_south: 51.0, p_east: 17.2, p_north: 51.2 })
   expect(pins).toEqual([
-    { id: 'a', lon: 17.03, lat: 51.11, rats: 2, createdAt: '2026-10-08T10:00:00Z', photoPath: 'a.jpg', nickname: 'Ala', isMine: false },
+    { id: 'a', lon: 17.03, lat: 51.11, rats: 2, createdAt: '2026-10-08T10:00:00Z', photoPath: 'a.jpg', nickname: 'Ala', isMine: false, skin: 'gold', title: 'Tester' },
   ])
 })
 

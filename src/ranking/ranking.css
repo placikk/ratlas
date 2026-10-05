@@ -38,3 +38,10 @@
   text-align: center;
   color: var(--text-muted);
 }
+
+.ranking__title {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--rose-dark);
+}

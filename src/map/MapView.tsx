@@ -12,7 +12,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { useEffect, useRef } from 'react'
 import { BASE_STYLE_URL, ratifyStyle } from './mapStyle'
 import { normalizeBounds, type Bounds, type PinCollection } from './pins'
-import { RAT_ICON_SVG, RAT_MINE_ICON_SVG, svgToImage } from './ratIcons'
+import { PIN_SKINS, ratIconSvg, svgToImage } from './ratIcons'
 
 // MapLibre 6 to ESM z osobnym workerem — Vite pakuje go razem z zależnościami.
 setWorkerUrl(workerUrl)
@@ -102,11 +102,17 @@ export function MapView({
 
       map.on('load', async () => {
         try {
-          const rat = await svgToImage(RAT_ICON_SVG, 96)
-          const ratMine = await svgToImage(RAT_MINE_ICON_SVG, 96)
+          // Każda skórka w dwóch wersjach: zwykła i „moja” (z jasnym okręgiem).
+          const icons = await Promise.all(
+            Object.keys(PIN_SKINS).flatMap((skin) =>
+              [false, true].map(async (mine) => ({
+                name: `rat-${skin}${mine ? '-mine' : ''}`,
+                image: await svgToImage(ratIconSvg(skin, mine), 96),
+              })),
+            ),
+          )
           if (cancelled) return
-          map.addImage('rat', rat, { pixelRatio: 2 })
-          map.addImage('rat-mine', ratMine, { pixelRatio: 2 })
+          for (const icon of icons) map.addImage(icon.name, icon.image, { pixelRatio: 2 })
         } catch (error) {
           if (cancelled) return
           console.error('Nie udało się wczytać ikon pinezek', error)
@@ -141,7 +147,7 @@ export function MapView({
           source: SOURCE_ID,
           filter: ['!', ['has', 'point_count']],
           layout: {
-            'icon-image': ['case', ['get', 'mine'], 'rat-mine', 'rat'],
+            'icon-image': ['concat', 'rat-', ['get', 'skin'], ['case', ['get', 'mine'], '-mine', '']],
             'icon-allow-overlap': true,
             'text-field': ['case', ['>', ['get', 'rats'], 1], ['to-string', ['get', 'rats']], ''],
             'text-font': ['Noto Sans Bold'],

@@ -40,6 +40,8 @@ const pin = {
   photoPath: 'a.jpg',
   nickname: 'Ala',
   isMine: false,
+  skin: null,
+  title: 'Kanałowy Detektyw',
 }
 
 beforeEach(() => {
@@ -60,7 +62,7 @@ async function showMap() {
 test('po przesunięciu mapy pobiera pinezki i przekazuje je mapie', async () => {
   await showMap()
   expect(mocks.fetchPins).toHaveBeenCalledWith(bounds)
-  expect(mocks.view.collection?.features[0].properties).toEqual({ id: 'a', rats: 3, opacity: expect.any(Number), mine: false })
+  expect(mocks.view.collection?.features[0].properties).toEqual({ id: 'a', rats: 3, opacity: expect.any(Number), mine: false, skin: 'default' })
 })
 
 test('co minutę odświeża pinezki', async () => {
@@ -76,6 +78,7 @@ test('kliknięcie pinezki pokazuje zdjęcie, liczbę szczurów, czas i autora', 
   expect(panel).toHaveTextContent('3 szczury')
   expect(panel).toHaveTextContent('2 godziny temu')
   expect(panel).toHaveTextContent('Wypatrzył(a): Ala')
+  expect(panel).toHaveTextContent('„Kanałowy Detektyw”')
   expect(screen.getByRole('img', { name: 'Zdjęcie szczura' })).toHaveAttribute('src', 'https://x/a.jpg')
 })
 

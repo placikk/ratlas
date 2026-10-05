@@ -4,6 +4,7 @@ Szczurza mapa Wrocławia — PWA, w której mieszkańcy fotografują szczury, zb
 
 - Specyfikacja: `docs/superpowers/specs/2026-09-29-szczury-wroclaw-design.md`
 - Plany implementacji: `docs/superpowers/plans/`
+- Szczurza Biblioteka: karty wiedzy, quizy i wygląd za raciki
 
 ## Uruchomienie lokalne
 

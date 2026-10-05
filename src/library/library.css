@@ -1,0 +1,84 @@
+.library__balance {
+  margin: 0;
+  font-weight: 800;
+  color: var(--rose-dark);
+}
+
+.library__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.library__item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.library__text {
+  gap: 2px;
+}
+
+.library__price {
+  flex-shrink: 0;
+  font-weight: 800;
+  color: var(--rose-dark);
+}
+
+.library__back {
+  align-self: flex-start;
+}
+
+.library__card p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.library__sources {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.library__question {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.library__answer--correct {
+  outline: 3px solid var(--rose-dark);
+}
+
+.library__answer--wrong {
+  text-decoration: line-through;
+}
+
+.library__score {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.library__skin {
+  align-self: center;
+}
+
+.library__title-preview {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--rose-dark);
+}

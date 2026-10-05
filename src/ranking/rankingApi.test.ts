@@ -6,8 +6,8 @@ const mocks = vi.hoisted(() => ({ rpc: vi.fn() }))
 vi.mock('../lib/supabase', () => ({ supabase: { rpc: mocks.rpc } }))
 
 test('pobiera ranking wybranego okresu', async () => {
-  mocks.rpc.mockResolvedValue({ data: [{ place: 1, nickname: 'Ala', rats: 12, is_me: true }], error: null })
-  expect(await fetchRanking('month')).toEqual([{ place: 1, nickname: 'Ala', rats: 12, isMe: true }])
+  mocks.rpc.mockResolvedValue({ data: [{ place: 1, nickname: 'Ala', rats: 12, is_me: true, title: 'Tester' }], error: null })
+  expect(await fetchRanking('month')).toEqual([{ place: 1, nickname: 'Ala', rats: 12, isMe: true, title: 'Tester' }])
   expect(mocks.rpc).toHaveBeenCalledWith('get_ranking', { p_period: 'month' })
 })
 

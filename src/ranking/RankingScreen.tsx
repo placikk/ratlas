@@ -68,6 +68,7 @@ export function RankingScreen() {
                   <span className="ranking__place">{row.place}.</span>
                   <strong className="ranking__name">
                     {row.nickname} {row.isMe && <span className="muted">{t('ranking.me')}</span>}
+                    {row.title && <span className="ranking__title">{row.title}</span>}
                   </strong>
                   <span>{t('ranking.rats', { count: row.rats })}</span>
                 </li>

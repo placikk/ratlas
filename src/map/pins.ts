@@ -1,3 +1,5 @@
+import { skinOrDefault } from './ratIcons'
+
 export interface Pin {
   id: string
   lon: number
@@ -7,6 +9,8 @@ export interface Pin {
   photoPath: string
   nickname: string | null
   isMine: boolean
+  skin: string | null
+  title: string | null
 }
 
 export interface Bounds {
@@ -21,6 +25,7 @@ export interface PinProperties {
   rats: number
   opacity: number
   mine: boolean
+  skin: string
 }
 
 export interface PinFeature {
@@ -52,7 +57,7 @@ export function toFeatureCollection(pins: Pin[], now: number, fadeDays: number):
     features: pins.map((pin, index) => ({
       type: 'Feature',
       id: index,
-      properties: { id: pin.id, rats: pin.rats, opacity: pinOpacity(pin.createdAt, now, fadeDays), mine: pin.isMine },
+      properties: { id: pin.id, rats: pin.rats, opacity: pinOpacity(pin.createdAt, now, fadeDays), mine: pin.isMine, skin: skinOrDefault(pin.skin) },
       geometry: { type: 'Point', coordinates: [pin.lon, pin.lat] },
     })),
   }

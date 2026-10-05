@@ -1,5 +1,5 @@
 begin;
-select plan(23);
+select plan(25);
 
 delete from public.reports;
 delete from public.sightings;
@@ -156,6 +156,29 @@ update public.app_config set value = '1' where key = 'daily_report_limit';
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"44444444-4444-4444-4444-444444444444","role":"authenticated"}';
 select is(public.report_sighting('aaaaaaaa-0000-0000-0000-000000000002', 'other'), 'already', 'ponowne zgłoszenie wygrywa z limitem');
+
+-- Skórka i tytuł właściciela pinezki
+reset role;
+insert into public.reward_items (id, type, name, teaser, price, content, sort_order) values
+  ('t_map_skin', 'pin_skin', 'Test', 't', 10, '{"skin":"gold"}', 901),
+  ('t_map_title', 'title', 'Test', 't', 10, '{"label":"Tester"}', 902);
+update public.profiles set active_pin_skin = 't_map_skin', active_title = 't_map_title'
+ where id = '22222222-2222-2222-2222-222222222222';
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+select is(
+  (select row(skin, title)::text from public.sightings_in_view(16.8, 51.0, 17.2, 51.25) where id = 'aaaaaaaa-0000-0000-0000-000000000002'),
+  row('gold', null::text)::text,
+  'pinezka ma skórkę właściciela; tytuł jest ukryty razem z pseudonimem'
+);
+reset role;
+update public.profiles set show_nickname_on_map = true where id = '22222222-2222-2222-2222-222222222222';
+set local role authenticated;
+select is(
+  (select title from public.sightings_in_view(16.8, 51.0, 17.2, 51.25) where id = 'aaaaaaaa-0000-0000-0000-000000000002'),
+  'Tester',
+  'tytuł widać przy widocznym pseudonimie'
+);
 
 select * from finish();
 rollback;

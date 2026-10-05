@@ -7,6 +7,7 @@ export interface RankingRow {
   nickname: string
   rats: number
   isMe: boolean
+  title: string | null
 }
 
 interface Row {
@@ -14,6 +15,7 @@ interface Row {
   nickname: string
   rats: number
   is_me: boolean
+  title: string | null
 }
 
 export async function fetchRanking(period: RankingPeriod): Promise<RankingRow[]> {
@@ -24,5 +26,6 @@ export async function fetchRanking(period: RankingPeriod): Promise<RankingRow[]>
     nickname: row.nickname,
     rats: Number(row.rats),
     isMe: row.is_me,
+    title: row.title ?? null,
   }))
 }

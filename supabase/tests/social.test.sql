@@ -1,5 +1,5 @@
 begin;
-select plan(15);
+select plan(16);
 
 delete from public.reports;
 delete from public.sightings;
@@ -115,6 +115,19 @@ select ok(
   and has_function_privilege('service_role', 'public.list_expired_rejected_photos(uuid)', 'execute')
   and has_table_privilege('service_role', 'public.sightings', 'select'),
   'uprawnienia nowych funkcji'
+);
+
+-- Tytuł w rankingu
+reset role;
+insert into public.reward_items (id, type, name, teaser, price, content, sort_order) values
+  ('t_rank_title', 'title', 'Test', 't', 10, '{"label":"Tester"}', 903);
+update public.profiles set active_title = 't_rank_title' where id = '11111111-1111-1111-1111-111111111111';
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+select is(
+  (select array_agg(row(is_me, title)::text order by is_me) from public.get_ranking('all')),
+  array[row(false, null::text)::text, row(true, 'Tester')::text],
+  'ranking pokazuje tytuł założony przez osobę (Ola bez tytułu, Ala z tytułem)'
 );
 
 select * from finish();

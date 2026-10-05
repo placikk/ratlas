@@ -5,6 +5,7 @@ import { ProfileScreen } from '../profile/ProfileScreen'
 import type { Profile } from '../profile/profileApi'
 import { retryPending } from '../report/reportApi'
 import { ReportScreen } from '../report/ReportScreen'
+import { LibraryScreen } from '../library/LibraryScreen'
 import { RankingScreen } from '../ranking/RankingScreen'
 import { TabBar, type Tab } from './TabBar'
 
@@ -38,6 +39,8 @@ export function AppShell({ profile, onProfileChange }: { profile: Profile; onPro
           <Suspense fallback={<p className="screen muted">{t('app.loading')}</p>}>
             <MapScreen />
           </Suspense>
+        ) : tab === 'library' ? (
+          <LibraryScreen balance={profile.tokens_balance} onBalanceChange={onProfileChange} />
         ) : (
           <RankingScreen />
         )}
