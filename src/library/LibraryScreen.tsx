@@ -44,8 +44,8 @@ export function LibraryScreen({ balance, onBalanceChange }: { balance: number; o
     const outcome = await purchaseItem(item.id)
     setBusy(false)
     setBuying(null)
+    if (outcome !== 'error') onBalanceChange()
     if (outcome === 'purchased' || outcome === 'owned') {
-      onBalanceChange()
       reload()
       setOpenId(item.id)
       return

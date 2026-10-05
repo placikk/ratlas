@@ -59,6 +59,17 @@ test('za mało racików blokuje zakup', async () => {
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
 })
 
+test('odmowa serwera z powodu salda odświeża saldo i pokazuje komunikat', async () => {
+  vi.mocked(fetchCatalog).mockResolvedValue([card])
+  vi.mocked(purchaseItem).mockResolvedValue('insufficient')
+  const onBalanceChange = vi.fn()
+  render(<LibraryScreen balance={40} onBalanceChange={onBalanceChange} />)
+  await userEvent.click(await screen.findByRole('button', { name: /Czy szczury się śmieją/ }))
+  await userEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Kup' }))
+  expect(await screen.findByRole('alert')).toHaveTextContent('Masz za mało racików.')
+  expect(onBalanceChange).toHaveBeenCalled()
+})
+
 test('posiadany przedmiot otwiera się od razu', async () => {
   vi.mocked(fetchCatalog).mockResolvedValue([quiz])
   render(<LibraryScreen balance={0} onBalanceChange={vi.fn()} />)

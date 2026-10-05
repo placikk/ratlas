@@ -16,9 +16,10 @@ Po 3 zgłoszeniach nadużycia od różnych osób pinezka znika z mapy (`sighting
 ```sql
 begin;
 with old as (
-  select id, user_id, rats_awarded, tokens_awarded
-    from public.sightings
-   where id = '<id zgłoszenia>' and (rats_awarded > 0 or tokens_awarded > 0)
+  select s.id, s.user_id, s.rats_awarded, s.tokens_awarded,
+         least(s.tokens_awarded, (select p.tokens_balance from public.profiles p where p.id = s.user_id)) as deducted
+    from public.sightings s
+   where s.id = '<id zgłoszenia>' and (s.rats_awarded > 0 or s.tokens_awarded > 0)
      for update
 ),
 zeroed as (
@@ -26,22 +27,22 @@ zeroed as (
      set rats_awarded = 0, tokens_awarded = 0
     from old
    where s.id = old.id
-  returning old.id, old.user_id, old.rats_awarded, old.tokens_awarded
+  returning old.id, old.user_id, old.rats_awarded, old.deducted
 ),
 reduced as (
   update public.profiles p
      set total_rats = greatest(0, p.total_rats - z.rats_awarded),
-         tokens_balance = greatest(0, p.tokens_balance - z.tokens_awarded)
+         tokens_balance = p.tokens_balance - z.deducted
     from zeroed z
    where p.id = z.user_id
   returning p.id
 )
 insert into public.token_ledger (user_id, delta, reason, ref_id)
-select user_id, -tokens_awarded, 'correction', id from zeroed where tokens_awarded > 0;
+select user_id, -deducted, 'correction', id from zeroed where deducted > 0;
 commit;
 ```
 
-   Zapytanie jest bezpieczne do ponownego uruchomienia: zeruje punkty zgłoszenia i koryguje profil tylko raz.
+   Zapytanie jest bezpieczne do ponownego uruchomienia: zeruje punkty zgłoszenia i koryguje profil tylko raz. Raciki mogły już zostać wydane w Bibliotece, więc odejmujemy najwyżej tyle, ile osoba ma teraz na saldzie, a w rejestrze zapisuje się faktycznie odjęta kwota.
 
 ## Werdykt modelu dla zgłoszenia
 

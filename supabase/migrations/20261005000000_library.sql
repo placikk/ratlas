@@ -64,7 +64,7 @@ as $$
     from public.reward_items i
     left join public.user_rewards ur on ur.item_id = i.id and ur.user_id = (select auth.uid())
     left join public.profiles p on p.id = (select auth.uid())
-   where i.active
+   where i.active or ur.item_id is not null
    order by i.sort_order
 $$;
 

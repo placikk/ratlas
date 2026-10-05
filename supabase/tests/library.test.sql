@@ -1,5 +1,5 @@
 begin;
-select plan(24);
+select plan(27);
 
 -- Testy działają na własnych przedmiotach (katalog startowy dochodzi w osobnej migracji).
 delete from public.reward_items;
@@ -75,7 +75,17 @@ set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","r
 select is((select count(*)::int from public.get_item_content('t_card')), 0, 'cudzy zakup nie daje dostępu do treści');
 select throws_ok($$ select public.save_quiz_result('t_quiz', 1) $$, 'P0001', 'not owned', 'wynik zapisze tylko osoba z quizem');
 
--- 24: uprawnienia
+-- 24–26: wycofany przedmiot zostaje właścicielom
+reset role;
+insert into public.user_rewards (user_id, item_id) values ('11111111-1111-1111-1111-111111111111', 't_old');
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+select is((select count(*)::int from public.library_catalog() where id = 't_old'), 1, 'wycofany przedmiot zostaje w katalogu właściciela');
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+select is((select count(*)::int from public.library_catalog() where id = 't_old'), 0, 'wycofany przedmiot nie jest widoczny dla innych');
+select is(public.purchase_item('t_old'), 'not_found', 'wycofanego przedmiotu nie kupisz');
+
+-- 27: uprawnienia
 reset role;
 select ok(
   has_function_privilege('authenticated', 'public.library_catalog()', 'execute')

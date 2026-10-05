@@ -272,7 +272,7 @@
       "unequip": "Zdejmij",
       "equippedNow": "Masz to na sobie.",
       "skinHint": "Tak zobaczą Twoje pinezki inne osoby na mapie.",
-      "titleHint": "Tytuł pokazuje się przy Twoim pseudonimie w rankingu i na mapie.",
+      "titleHint": "Tytuł pokazuje się przy Twoim pseudonimie w rankingu, a na mapie — gdy pseudonim jest widoczny.",
       "titlePreview": "„{{title}}”",
       "equipFailed": "Nie udało się zmienić wyglądu."
     }
