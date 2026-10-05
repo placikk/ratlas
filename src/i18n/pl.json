@@ -184,7 +184,8 @@
       "limit": "Dzienny limit zgłoszeń nadużyć wykorzystany. Wróć jutro.",
       "error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
     },
-    "mapTitle": "Mapa szczurów we Wrocławiu"
+    "mapTitle": "Mapa szczurów we Wrocławiu",
+    "title": "„{{title}}”"
   },
   "mySightings": {
     "title": "Moje zgłoszenia",

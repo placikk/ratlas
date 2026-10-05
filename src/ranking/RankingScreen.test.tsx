@@ -8,14 +8,15 @@ vi.mock('./rankingApi', () => ({ fetchRanking: vi.fn() }))
 
 test('pokazuje ranking miesięczny i zaznacza moją pozycję', async () => {
   vi.mocked(fetchRanking).mockResolvedValue([
-    { place: 1, nickname: 'Ala', rats: 12, isMe: false },
-    { place: 2, nickname: 'Ola', rats: 3, isMe: true },
+    { place: 1, nickname: 'Ala', rats: 12, isMe: false, title: 'Kanałowy Detektyw' },
+    { place: 2, nickname: 'Ola', rats: 3, isMe: true, title: null },
   ])
   render(<RankingScreen />)
 
   const items = await screen.findAllByRole('listitem')
   expect(items).toHaveLength(2)
   expect(within(items[0]).getByText('Ala')).toBeInTheDocument()
+  expect(within(items[0]).getByText('Kanałowy Detektyw')).toBeInTheDocument()
   expect(within(items[0]).getByText('12 szczurów')).toBeInTheDocument()
   expect(within(items[1]).getByText('(Ty)')).toBeInTheDocument()
   expect(fetchRanking).toHaveBeenCalledWith('month')
@@ -31,8 +32,8 @@ test('przełącza na ranking od początku', async () => {
 
 test('moja pozycja spoza czołówki jest oddzielona', async () => {
   vi.mocked(fetchRanking).mockResolvedValue([
-    { place: 50, nickname: 'Pięćdziesiąty', rats: 4, isMe: false },
-    { place: 73, nickname: 'Ja', rats: 1, isMe: true },
+    { place: 50, nickname: 'Pięćdziesiąty', rats: 4, isMe: false, title: null },
+    { place: 73, nickname: 'Ja', rats: 1, isMe: true, title: null },
   ])
   render(<RankingScreen />)
   expect(await screen.findByText('…')).toBeInTheDocument()

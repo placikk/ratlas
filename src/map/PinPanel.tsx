@@ -42,6 +42,7 @@ export function PinPanel({
         <span className="muted">{timeAgo(pin.createdAt, now, t('map.justNow'))}</span>
       </div>
       <span className="muted">{pin.nickname ? t('map.author', { nickname: pin.nickname }) : t('map.authorHidden')}</span>
+      {pin.title && <span className="pin-panel__title">{t('map.title', { title: pin.title })}</span>}
 
       {result && <p role="status">{t(`map.reportResult.${result}`)}</p>}
 

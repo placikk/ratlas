@@ -16,16 +16,29 @@ test.each([
 
 test('zamienia pinezki na GeoJSON dla mapy', () => {
   const pins: Pin[] = [
-    { id: 'a', lon: 17.03, lat: 51.11, rats: 3, createdAt: new Date(NOW).toISOString(), photoPath: 'a.jpg', nickname: 'Ala', isMine: true },
-    { id: 'b', lon: 17.05, lat: 51.12, rats: 1, createdAt: new Date(NOW - 7 * DAY).toISOString(), photoPath: 'b.jpg', nickname: null, isMine: false },
+    { id: 'a', lon: 17.03, lat: 51.11, rats: 3, createdAt: new Date(NOW).toISOString(), photoPath: 'a.jpg', nickname: 'Ala', isMine: true, skin: 'gold', title: null },
+    { id: 'b', lon: 17.05, lat: 51.12, rats: 1, createdAt: new Date(NOW - 7 * DAY).toISOString(), photoPath: 'b.jpg', nickname: null, isMine: false, skin: null, title: null },
   ]
   expect(toFeatureCollection(pins, NOW, 7)).toEqual({
     type: 'FeatureCollection',
     features: [
-      { type: 'Feature', id: 0, properties: { id: 'a', rats: 3, opacity: 1, mine: true }, geometry: { type: 'Point', coordinates: [17.03, 51.11] } },
-      { type: 'Feature', id: 1, properties: { id: 'b', rats: 1, opacity: 0.15, mine: false }, geometry: { type: 'Point', coordinates: [17.05, 51.12] } },
+      { type: 'Feature', id: 0, properties: { id: 'a', rats: 3, opacity: 1, mine: true, skin: 'gold' }, geometry: { type: 'Point', coordinates: [17.03, 51.11] } },
+      { type: 'Feature', id: 1, properties: { id: 'b', rats: 1, opacity: 0.15, mine: false, skin: 'default' }, geometry: { type: 'Point', coordinates: [17.05, 51.12] } },
     ],
   })
+})
+
+test('właściwości pinezki mają znaną skórkę', () => {
+  const base = { lon: 17, lat: 51, rats: 1, createdAt: '2026-10-05T10:00:00Z', photoPath: 'a.jpg', nickname: null, isMine: false, title: null }
+  const collection = toFeatureCollection(
+    [
+      { ...base, id: 'a', skin: 'gold' },
+      { ...base, id: 'b', skin: 'nieznana' },
+    ],
+    Date.parse('2026-10-05T10:00:00Z'),
+    7,
+  )
+  expect(collection.features.map((feature) => feature.properties.skin)).toEqual(['gold', 'default'])
 })
 
 test.each([

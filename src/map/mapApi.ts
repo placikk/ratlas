@@ -16,6 +16,8 @@ interface PinRow {
   photo_path: string
   nickname: string | null
   is_mine: boolean
+  skin: string | null
+  title: string | null
 }
 
 export async function fetchPins(bounds: Bounds): Promise<Pin[]> {
@@ -35,6 +37,8 @@ export async function fetchPins(bounds: Bounds): Promise<Pin[]> {
     photoPath: row.photo_path,
     nickname: row.nickname,
     isMine: row.is_mine,
+    skin: row.skin,
+    title: row.title,
   }))
 }
 
