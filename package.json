@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "icons": "pwa-assets-generator --preset minimal-2023 public/logo.svg",
+    "icons": "pwa-assets-generator",
     "db:start": "supabase start -x realtime,imgproxy,studio,logflare,vector,supavisor,postgres-meta",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
