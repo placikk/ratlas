@@ -15,7 +15,7 @@ insert into public.reward_items (id, type, name, teaser, price, sort_order, cont
 ('card_laugh', 'knowledge_card', 'Czy szczury się śmieją?', 'Łaskotanie w laboratorium', 30, 2, $j${
   "body": [
     "Na swój sposób tak. Neurobiolog Jaak Panksepp odkrył, że łaskotane szczury wydają krótkie piski o częstotliwości około 50 kHz, których ludzkie ucho nie słyszy. Nazwał je „szczurzym śmiechem”.",
-    "Łaskotane szczury chętnie wracają do ręki, która je łaskotała. W 2016 roku badacze z Berlina pokazali, że za ten „śmiech” odpowiada konkretny obszar kory mózgowej. Szczury „śmieją się” też podczas zabawy z innymi szczurami.",
+    "Łaskotane szczury chętnie wracają do ręki, która je łaskotała. W 2016 roku badacze z Berlina pokazali, że łaskotanie i zabawa pobudzają określony obszar kory somatosensorycznej szczura. Szczury „śmieją się” też podczas zabawy z innymi szczurami.",
     "To nie powód, żeby łaskotać dzikie szczury! Dzikie zwierzę może ugryźć i przenosić choroby — fotografuj z dystansu."
   ],
   "sources": [
@@ -59,7 +59,7 @@ insert into public.reward_items (id, type, name, teaser, price, sort_order, cont
   "body": [
     "Szczury nie widzą ostro, ale ich oczy rejestrują światło ultrafioletowe, którego ludzie nie widzą.",
     "Świat poznają głównie węchem i wąsami (wibrysami). Szybko poruszając wąsami, „omiatają” otoczenie i nawet w ciemności rozpoznają kształty i faktury.",
-    "Węch gryzoni jest tak czuły, że afrykańskie szczury olbrzymie szkoli się do wyszukiwania min — o tym opowiada karta „Szczury bohaterowie”."
+    "Węch gryzoni jest tak czuły, że afrykańskie szczury olbrzymie szkoli się do wyszukiwania min — opowiadamy o tym w innej karcie."
   ],
   "sources": [
     {"label": "Wikipedia: Brown rat (zmysły)", "url": "https://en.wikipedia.org/wiki/Brown_rat"},
@@ -68,7 +68,7 @@ insert into public.reward_items (id, type, name, teaser, price, sort_order, cont
 }$j$::jsonb),
 ('card_herorats', 'knowledge_card', 'Szczury bohaterowie', 'Gryzonie, które ratują ludzi', 30, 7, $j${
   "body": [
-    "Organizacja APOPO z Tanzanii szkoli afrykańskie szczury olbrzymie do wyszukiwania min lądowych. Szczur jest za lekki, żeby zdetonować minę, a węchem przeszukuje teren znacznie szybciej niż człowiek z wykrywaczem metalu.",
+    "Organizacja APOPO, działająca m.in. w Tanzanii, szkoli afrykańskie szczury olbrzymie do wyszukiwania min lądowych. Według APOPO szczur jest za lekki, żeby zdetonować minę, a węchem przeszukuje teren znacznie szybciej niż człowiek z wykrywaczem metalu.",
     "Najsłynniejszy z nich, Magawa, wywęszył w Kambodży ponad 100 min i niewybuchów. W 2020 roku jako pierwszy szczur dostał złoty medal brytyjskiej organizacji PDSA za odwagę.",
     "Szczury APOPO uczą się też rozpoznawać po zapachu próbki, w których są bakterie gruźlicy."
   ],
@@ -80,11 +80,12 @@ insert into public.reward_items (id, type, name, teaser, price, sort_order, cont
 ('card_empathy', 'knowledge_card', 'Szczurza empatia', 'Eksperyment z uwięzionym kolegą', 30, 8, $j${
   "body": [
     "W 2011 roku badacze z Uniwersytetu w Chicago zamykali szczura w ciasnej rurce i obserwowali jego towarzysza z klatki. Wolny szczur uczył się otwierać drzwiczki i uwalniał uwięzionego kolegę, choć nie dostawał za to żadnej nagrody.",
-    "Gdy obok stała druga rurka z czekoladą, szczury często i tak uwalniały kolegę, a potem dzieliły się z nim smakołykiem.",
+    "Gdy obok stała druga rurka z czekoladą, szczury często i tak uwalniały kolegę i zostawiały mu część smakołyku.",
     "Szczury to zwierzęta stadne: śpią przytulone, czyszczą sobie nawzajem futro i uczą się od siebie, co jest bezpieczne do jedzenia."
   ],
   "sources": [
-    {"label": "Bartal, Decety i Mason (2011), Science", "url": "https://doi.org/10.1126/science.1210789"}
+    {"label": "Bartal, Decety i Mason (2011), Science", "url": "https://doi.org/10.1126/science.1210789"},
+    {"label": "Wikipedia: Brown rat (zachowania społeczne)", "url": "https://en.wikipedia.org/wiki/Brown_rat"}
   ]
 }$j$::jsonb),
 ('card_culture', 'knowledge_card', 'Szczury w kulturze', 'Od zodiaku po kuchnię w Paryżu', 30, 9, $j${
@@ -96,7 +97,7 @@ insert into public.reward_items (id, type, name, teaser, price, sort_order, cont
   "sources": [
     {"label": "Wikipedia: Szczurołap z Hameln", "url": "https://pl.wikipedia.org/wiki/Szczurołap_z_Hameln"},
     {"label": "Wikipedia: Chinese zodiac", "url": "https://en.wikipedia.org/wiki/Chinese_zodiac"},
-    {"label": "Wikipedia: Ratatuj", "url": "https://pl.wikipedia.org/wiki/Ratatuj"}
+    {"label": "Wikipedia: Ratatouille (film)", "url": "https://en.wikipedia.org/wiki/Ratatouille_(film)"}
   ]
 }$j$::jsonb),
 ('card_family', 'knowledge_card', 'Szczurza rodzina', 'Dlaczego szczurów szybko przybywa', 30, 10, $j${
@@ -111,7 +112,7 @@ insert into public.reward_items (id, type, name, teaser, price, sort_order, cont
 }$j$::jsonb),
 ('quiz_body', 'quiz', 'Quiz: ciało i gatunki', '5 pytań o to, jak zbudowany jest szczur', 50, 11, $j${
   "questions": [
-    {"question": "Który szczur najczęściej żyje w polskich miastach?", "answers": ["Szczur śniady", "Szczur wędrowny", "Szczur olbrzymi"], "correct": 1, "explain": "Szczur wędrowny (brunatny) w dużej mierze wyparł u nas szczura śniadego."},
+    {"question": "Który szczur najczęściej żyje w polskich miastach?", "answers": ["Szczur śniady", "Szczur wędrowny", "Mysz domowa"], "correct": 1, "explain": "Szczur wędrowny (brunatny) w dużej mierze wyparł u nas szczura śniadego."},
     {"question": "Po czym rozpoznasz szczura śniadego?", "answers": ["Ogon dłuższy niż ciało i duże uszy", "Krótki ogon i małe uszy", "Białe łapki"], "correct": 0, "explain": "Szczur śniady jest smukły, ma duże uszy i bardzo długi ogon."},
     {"question": "Dlaczego zęby szczura są pomarańczowe?", "answers": ["Od brudu", "Szkliwo zawiera żelazo", "Od jedzenia marchewki"], "correct": 1, "explain": "Żelazo w szkliwie barwi siekacze i czyni je twardszymi."},
     {"question": "Co się dzieje z siekaczami szczura przez całe życie?", "answers": ["Wypadają co roku", "Przestają rosnąć po roku", "Ciągle rosną"], "correct": 2, "explain": "Siekacze gryzoni rosną całe życie i ścierają się podczas gryzienia."},
