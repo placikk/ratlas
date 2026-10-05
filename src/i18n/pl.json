@@ -230,5 +230,49 @@
     "me": "(Ty)",
     "empty": "Nikt jeszcze nie zaliczył szczura w tym okresie. Bądź pierwszą osobą na liście 🐀",
     "loadFailed": "Nie udało się pobrać rankingu."
+  },
+  "library": {
+    "title": "Szczurza Biblioteka",
+    "balance": "Masz {{raciki}}",
+    "sections": {
+      "cards": "Karty wiedzy",
+      "quizzes": "Quizy",
+      "looks": "Wygląd"
+    },
+    "owned": "Masz ✓",
+    "equipped": "Założone",
+    "buyConfirm": "Kupić „{{name}}” za {{raciki}}?",
+    "buy": "Kup",
+    "cancel": "Anuluj",
+    "missing": "Brakuje Ci {{raciki}}. Zgłaszaj szczury, żeby zebrać więcej.",
+    "purchaseResult": {
+      "owned": "Ten przedmiot już masz.",
+      "insufficient": "Masz za mało racików.",
+      "not_found": "Tego przedmiotu nie ma już w Bibliotece.",
+      "error": "Nie udało się kupić. Spróbuj ponownie."
+    },
+    "loadFailed": "Nie udało się wczytać Biblioteki.",
+    "back": "← Wróć do Biblioteki",
+    "sources": "Źródła",
+    "contentFailed": "Nie udało się wczytać treści.",
+    "quiz": {
+      "progress": "Pytanie {{n}} z {{total}}",
+      "correct": "Dobrze!",
+      "wrong": "Niestety nie.",
+      "next": "Dalej",
+      "finish": "Zobacz wynik",
+      "score": "Twój wynik: {{score}} z {{total}}",
+      "best": "Najlepszy wynik: {{best}} z {{total}}",
+      "again": "Jeszcze raz"
+    },
+    "cosmetic": {
+      "equip": "Załóż",
+      "unequip": "Zdejmij",
+      "equippedNow": "Masz to na sobie.",
+      "skinHint": "Tak zobaczą Twoje pinezki inne osoby na mapie.",
+      "titleHint": "Tytuł pokazuje się przy Twoim pseudonimie w rankingu i na mapie.",
+      "titlePreview": "„{{title}}”",
+      "equipFailed": "Nie udało się zmienić wyglądu."
+    }
   }
 }
