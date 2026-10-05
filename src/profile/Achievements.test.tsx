@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
 import { Achievements } from './Achievements'
 import { fetchMyAchievements } from './achievementsApi'
@@ -15,12 +16,27 @@ test('pokazuje postęp, odblokowane, zablokowane i ukryte sekrety', async () => 
   render(<Achievements />)
 
   expect(await screen.findByText('2 z 5')).toBeInTheDocument()
+  expect(screen.getByText('Zostały 2 sekrety do odkrycia')).toBeInTheDocument()
+  await userEvent.click(screen.getByRole('button', { name: 'Pokaż wszystkie' }))
   expect(screen.getByText('Pierwszy szczur')).toBeInTheDocument()
   expect(screen.getByText('Szczurze Selfie')).toBeInTheDocument()
   expect(screen.getByText('Dziesiątka')).toBeInTheDocument()
   expect(screen.getAllByText('???')).toHaveLength(2)
-  expect(screen.getByText('Zostały 2 sekrety do odkrycia')).toBeInTheDocument()
   expect(screen.getByText('+25 racików')).toBeInTheDocument()
+})
+
+test('lista osiągnięć jest domyślnie zwinięta i da się ją zwinąć z powrotem', async () => {
+  vi.mocked(fetchMyAchievements).mockResolvedValue([unlocked, locked])
+  render(<Achievements />)
+
+  const toggle = await screen.findByRole('button', { name: 'Pokaż wszystkie' })
+  expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  expect(screen.queryByText('Dziesiątka')).not.toBeInTheDocument()
+
+  await userEvent.click(toggle)
+  expect(screen.getByText('Dziesiątka')).toBeInTheDocument()
+  await userEvent.click(screen.getByRole('button', { name: 'Zwiń' }))
+  expect(screen.queryByText('Dziesiątka')).not.toBeInTheDocument()
 })
 
 test('błąd pobierania pokazuje komunikat', async () => {

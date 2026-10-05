@@ -214,7 +214,9 @@
     "secretName": "???",
     "secretHint": "Sekretne osiągnięcie — odkryjesz je przypadkiem 😉",
     "reward": "+{{raciki}}",
-    "loadFailed": "Nie udało się pobrać osiągnięć."
+    "loadFailed": "Nie udało się pobrać osiągnięć.",
+    "showAll": "Pokaż wszystkie",
+    "collapse": "Zwiń"
   },
   "ranking": {
     "title": "Ranking",
