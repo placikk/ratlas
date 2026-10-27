@@ -2,13 +2,15 @@
 
 **A citizen-science game for Wrocław: photograph a rat, let an AI verify it, put it on the city's shared rat map.**
 
+### [▶ Open Ratlas](https://ratlas.szczury.workers.dev/)
+
 <p align="center">
   <img src="docs/images/map.png" width="300" alt="Ratlas city map of Wrocław with rat pins fading over a week, a nest cluster and custom pin skins">
 </p>
 
 Ratlas is an installable PWA. People in Wrocław photograph rats they meet with the live camera. A multimodal model checks each photo on the server, and accepted sightings go onto a shared city map where pins fade over 7 days. Players collect points and an in-game currency (*raciki*), climb ranks and the monthly / all-time rankings, unlock public and secret achievements, and spend raciki in the *Rat Library* on knowledge cards, quizzes and pin skins.
 
-- **Status:** deployed (Cloudflare Workers for the static PWA, Supabase for everything else).
+- **Live:** [ratlas.szczury.workers.dev](https://ratlas.szczury.workers.dev/), best opened on a phone (Cloudflare Workers for the static PWA, Supabase for everything else).
 - **Language:** the UI is in Polish. App strings live in an i18next resource file (`src/i18n/pl.json`), so it is ready for translation. The legal pages and product docs are Polish-only.
 
 ## What it does
